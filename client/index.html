@@ -1,48 +1,54 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="fr">
     <head>
         <meta charset="UTF-8" />
         <title>BlueJS</title>
         <link rel="stylesheet" href="style.css" />
-        <script src="script.js"></script>
         <script src="https://cdn.tailwindcss.com"></script>
     </head>
 
     <body>
         <header>BlueJS</header>
         <div>
-            <article>
-                <div class="flex justify-between">
-                    <h3>Titre du message</h3>
-                    <span>Jean Michel</span>
-                </div>
-            </article>
-            <article>
-                <div class="flex justify-between">
-                    <h3>Titre du message</h3>
-                    <span>Jean Michel</span>
-                </div>
-            </article>
-            <article>
-                <div class="flex justify-between">
-                    <h3>Titre du message</h3>
-                    <span>Jean Michel</span>
-                </div>
-            </article>
-            <article>
-                <div class="flex justify-between">
-                    <h3>Titre du message</h3>
-                    <span>Jean Michel</span>
-                </div>
-            </article>
-            <article>
-                <div class="flex justify-between">
-                    <h3>Titre du message</h3>
-                    <span>Jean Michel</span>
-                </div>
-            </article>
-            <textarea>Texte du message</textarea>
-            <button>Envoyer</button>
+            <div id="messages">
+                <article>
+                    <div class="flex justify-between">
+                        <h3>Titre du message</h3>
+                        <span>Jean Michel</span>
+                    </div>
+                </article>
+                <article>
+                    <div class="flex justify-between">
+                        <h3>Titre du message</h3>
+                        <span>Jean Michel</span>
+                    </div>
+                </article>
+                <article>
+                    <div class="flex justify-between">
+                        <h3>Titre du message</h3>
+                        <span>Jean Michel</span>
+                    </div>
+                </article>
+                <article>
+                    <div class="flex justify-between">
+                        <h3>Titre du message</h3>
+                        <span>Jean Michel</span>
+                    </div>
+                </article>
+                <article>
+                    <div class="flex justify-between">
+                        <h3>Titre du message</h3>
+                        <span>Jean Michel</span>
+                    </div>
+                </article>
+            </div>
+
+            <form id="newMessageForm" onsubmit="javascript:addMessage">
+                <textarea id="">Texte du message</textarea>
+                <button type="submit">Envoyer</button>
+            </form>
         </div>
     </body>
+
+    <script src="script.js"></script>
 </html>
