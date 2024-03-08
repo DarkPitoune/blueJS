@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
     <head>
         <meta name="description" content="Chat, laugh, hate : Blue!" />
@@ -55,18 +55,28 @@
         >
             <span id="logo"><span class="text-5xl">B</span>lue</span>
         </header>
-        <div class="flex h-full grow flex-col items-center">
+        <div class="flex h-full grow flex-col items-center gap-4 py-2">
             <div
                 id="messages"
-                class="min-h-0 w-[800px] max-w-full grow bg-white"
+                class="min-h-0 w-[800px] max-w-full grow rounded-lg bg-white"
             ></div>
-            <form id="newMessageForm">
+            <form
+                id="newMessageForm"
+                class="flex w-[800px] max-w-full items-center gap-6"
+            >
                 <textarea
+                    class="shadow-sky h-10 grow resize-none rounded-full px-3 leading-10 focus:outline-none"
                     id="message"
                     name="message"
                     placeholder="Your message"
+                    required
                 ></textarea>
-                <button type="submit">Envoyer</button>
+                <button
+                    type="submit"
+                    class="bg-sky focus:shadow-outline rounded-full px-4 py-2 font-bold text-white transition hover:bg-blue-700 focus:bg-blue-700 focus:outline-none"
+                >
+                    Envoyer
+                </button>
             </form>
         </div>
         <template id="messageRowTemplate">
