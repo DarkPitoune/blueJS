@@ -34,6 +34,7 @@ app.post("/msg", (req, res) => {
         messageData = validateMessage(req.body);
     } catch (error) {
         res.status(400).send(error.message);
+        return;
     }
 
     try {
@@ -44,18 +45,42 @@ app.post("/msg", (req, res) => {
     }
 });
 
-app.get("/msg/:id", (req, res) => {
-    getMessage(req, res);
+// Must be placed before /msg/:id
+app.get("/msg/nber", (req, res) => {
+    res.status(200).json(getMessagesNumber());
 });
+
+app.get("/msg/:id", (req, res) => {
+    if (!req.params.id) {
+        res.status(400).send("id is required");
+        return;
+    }
+    try {
+        const id = parseInt(req.params.id);
+        const message = getMessage(id);
+        res.status(200).json(message);
+    } catch (error) {
+        res.status(404).send(error.message);
+    }
+});
+
 app.get("/msg", (req, res) => {
     const allMessages = getAllMessages();
     return res.status(200).json(allMessages);
 });
-app.get("/msg/nber", (req, res) => {
-    getMessagesNumber(req, res);
-});
+
 app.delete("/msg/:id", (req, res) => {
-    delMessage(req, res);
+    if (!req.params.id) {
+        res.status(400).send("id is required");
+        return;
+    }
+    try {
+        const id = parseInt(req.params.id);
+        delMessage(id);
+        res.status(200).json(message);
+    } catch (error) {
+        res.status(404).send(error.message);
+    }
 });
 
 app.listen(8080); //commence à accepter les requêtes

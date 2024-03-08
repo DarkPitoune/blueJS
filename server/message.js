@@ -28,20 +28,28 @@ const postMessage = (messageData) => {
     return newMessage;
 };
 
-const getMessage = (req, res) => {
-    res.send("getMessage");
+const getMessage = (id) => {
+    const message = allMessages.find((message) => message.id === id);
+    if (!message) {
+        throw new Error(`message with id ${id} not found`);
+    }
+    return message;
 };
 
 const getAllMessages = () => {
     return allMessages;
 };
 
-const getMessagesNumber = (req, res) => {
-    res.send("getMessagesNumber");
+const getMessagesNumber = () => {
+    return { count: allMessages.length };
 };
 
-const delMessage = (req, res) => {
-    res.send("delMessage");
+const delMessage = (id) => {
+    const index = allMessages.findIndex((message) => message.id === id);
+    if (index === -1) {
+        throw new Error(`message with id ${id} not found`);
+    }
+    allMessages.splice(index, 1);
 };
 
 module.exports = {
