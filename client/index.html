@@ -1,74 +1,72 @@
 <!doctype html>
 <html lang="fr">
-
-<head>
-    <meta charset="UTF-8" />
-    <title>BlueJS</title>
-    <meta name="viewport" content="width=device-width" />
-    <link rel="stylesheet" href="style.css" />
-    <script src="https://cdn.tailwindcss.com"></script>
-    <style>
-        @import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
-    </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        sky: "#039aff",
-                        sea: "#e4e9f0",
+    <head>
+        <meta name="description" content="Chat, laugh, hate : Blue!" />
+        <link rel="icon" href="static/favicon.ico" />
+        <link
+            rel="apple-touch-icon"
+            sizes="180x180"
+            href="static/apple-touch-icon.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="32x32"
+            href="static/favicon-32x32.png"
+        />
+        <link
+            rel="icon"
+            type="image/png"
+            sizes="16x16"
+            href="static/favicon-16x16.png"
+        />
+        <link
+            rel="mask-icon"
+            href="static/safari-pinned-tab.svg"
+            color="#039aff"
+        />
+        <meta name="msapplication-TileColor" content="#039aff" />
+        <meta name="theme-color" content="#039aff" />
+        <meta charset="UTF-8" />
+        <title>BlueJS</title>
+        <meta name="viewport" content="width=device-width" />
+        <link rel="stylesheet" href="style.css" />
+        <script src="https://cdn.tailwindcss.com"></script>
+        <style>
+            @import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
+        </style>
+        <script>
+            tailwind.config = {
+                theme: {
+                    extend: {
+                        colors: {
+                            sky: "#039aff",
+                            sea: "#e4e9f0",
+                        },
                     },
                 },
-            },
-        };
-    </script>
-</head>
+            };
+        </script>
+    </head>
 
-<body class="bg-sea">
-    <header class="bg-sky box-shadow shadow-sky px-6 py-3 text-3xl text-white">
-        <span id="logo"><span class="text-5xl">B</span>lue</span>
-    </header>
-    <div class="flex flex-col items-center">
-        <div id="messages" class="max-w-4xl">
-            <article>
-                <div class="flex justify-between">
-                    <h3>Titre du message</h3>
-                    <span>Jean Michel</span>
-                </div>
-            </article>
-            <article>
-                <div class="flex justify-between">
-                    <h3>Titre du message</h3>
-                    <span>Jean Michel</span>
-                </div>
-            </article>
-            <article>
-                <div class="flex justify-between">
-                    <h3>Titre du message</h3>
-                    <span>Jean Michel</span>
-                </div>
-            </article>
-            <article>
-                <div class="flex justify-between">
-                    <h3>Titre du message</h3>
-                    <span>Jean Michel</span>
-                </div>
-            </article>
-            <article>
-                <div class="flex justify-between">
-                    <h3>Titre du message</h3>
-                    <span>Jean Michel</span>
-                </div>
-            </article>
+    <body class="bg-sea">
+        <header
+            class="bg-sky box-shadow shadow-sky px-6 py-3 text-3xl text-white"
+        >
+            <span id="logo"><span class="text-5xl">B</span>lue</span>
+        </header>
+        <div class="flex flex-col items-center">
+            <div id="messages" class="max-w-4xl"></div>
+            <form id="newMessageForm" onsubmit="javascript:addMessage">
+                <textarea
+                    id="message"
+                    name="message"
+                    placeholder="Your message"
+                ></textarea>
+                <button type="submit">Envoyer</button>
+            </form>
         </div>
+    </body>
 
-        <form id="newMessageForm" onsubmit="javascript:addMessage">
-            <textarea id="message" name="message" placeholder="Your message"></textarea>
-            <button type="submit">Envoyer</button>
-        </form>
-    </div>
-</body>
-
-<script src="script.js"></script>
-
+    <script src="script.js"></script>
 </html>
