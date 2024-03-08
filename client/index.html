@@ -1,27 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
-    <head>
-        <meta charset="UTF-8" />
-        <title>BlueJS</title>
-        <link rel="stylesheet" href="style.css" />
-        <script src="https://cdn.tailwindcss.com"></script>
-    </head>
 
-    <body>
-        <header>BlueJS</header>
-        <div>
-            <div id="messages"></div>
+<head>
+    <meta charset="UTF-8" />
+    <title>BlueJS</title>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sky: "#039aff",
+                        sea: "#e4e9f0",
+                    },
+                },
+            },
+        };
+    </script>
+</head>
 
-            <form id="newMessageForm" onsubmit="javascript:addMessage">
-                <textarea
-                    id="message"
-                    name="message"
-                    placeholder="Your message"
-                ></textarea>
-                <button type="submit">Envoyer</button>
-            </form>
+<body class="bg-sea">
+    <header class="bg-sky box-shadow shadow-sky px-6 py-3 text-3xl text-white">
+        <span id="logo"><span class="text-5xl">B</span>lue</span>
+    </header>
+    <div class="flex flex-col items-center">
+        <div id="messages" class="max-w-4xl">
+            <article>
+                <div class="flex justify-between">
+                    <h3>Titre du message</h3>
+                    <span>Jean Michel</span>
+                </div>
+            </article>
+            <article>
+                <div class="flex justify-between">
+                    <h3>Titre du message</h3>
+                    <span>Jean Michel</span>
+                </div>
+            </article>
+            <article>
+                <div class="flex justify-between">
+                    <h3>Titre du message</h3>
+                    <span>Jean Michel</span>
+                </div>
+            </article>
+            <article>
+                <div class="flex justify-between">
+                    <h3>Titre du message</h3>
+                    <span>Jean Michel</span>
+                </div>
+            </article>
+            <article>
+                <div class="flex justify-between">
+                    <h3>Titre du message</h3>
+                    <span>Jean Michel</span>
+                </div>
+            </article>
         </div>
-    </body>
 
-    <script src="script.js"></script>
+        <form id="newMessageForm" onsubmit="javascript:addMessage">
+            <textarea id="message" name="message" placeholder="Your message"></textarea>
+            <button type="submit">Envoyer</button>
+        </form>
+    </div>
+</body>
+
+<script src="script.js"></script>
+
 </html>
