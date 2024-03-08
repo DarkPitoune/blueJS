@@ -17,6 +17,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap')
     </style>
     <script>
         tailwind.config = {
@@ -37,23 +38,24 @@
         <span id="logo"><span class="text-5xl">B</span>lue</span>
     </header>
     <div class="flex h-full min-h-0 grow flex-col items-center gap-4 py-6">
-        <div id="messages" class="min-h-0 w-[800px] max-w-full grow overflow-y-auto rounded-lg flex flex-col gap-8">
+        <div id="messages" class="min-h-0 w-[800px] max-w-full grow overflow-y-auto flex flex-col gap-8">
         </div>
-        <form id="newMessageForm" class="flex w-[800px] max-w-full items-center gap-6">
+        <form id="newMessageForm" class="flex w-[800px] max-w-full items-center gap-4">
             <textarea class="shadow-sky h-10 grow resize-none rounded-full px-3 leading-10 focus:outline-none"
                 id="message" name="message" placeholder="Your message" required></textarea>
             <button type="submit"
                 class="bg-sky focus:shadow-outline rounded-full px-4 py-2 font-bold text-white transition hover:bg-blue-700 focus:bg-blue-700 focus:outline-none">
-                Envoyer
+                Send
             </button>
         </form>
     </div>
     <template id="messageRowTemplate">
-        <article class="flex gap-4">
+        <article class="flex gap-4 ">
             <img class="messageRowTemplate_photo h-10 w-10 rounded-full" />
-            <div class="bg-white ">
+            <div class="bg-white px-4 py-2 rounded-lg relative min-w-0">
+                <div class="absolute top-0 border-8 -left-2 border-transparent border-t-white"></div>
                 <div class="messageRowTemplate_date"></div>
-                <div class="messageRowTemplate_content"></div>
+                <div class="messageRowTemplate_content text-wrap break-words"></div>
                 <div class="messageRowTemplate_username"></div>
                 <div>
         </article>
