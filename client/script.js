@@ -16,6 +16,9 @@ document
             )}`,
         });
         update(msgs);
+        document
+            .getElementById("messages")
+            .scrollIntoView({ behavior: "smooth" });
     });
 
 function update(arrayOfMessages) {
