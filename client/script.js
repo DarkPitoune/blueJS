@@ -24,6 +24,12 @@ class MessageServerService {
 
 const messageServerService = new MessageServerService();
 
+const scrollToBottom = () => {
+    document
+        .getElementById("messages")
+        .lastElementChild.scrollIntoView({ behavior: "smooth" });
+};
+
 // Attach the post message handler
 document
     .getElementById("newMessageForm")
@@ -38,7 +44,7 @@ document
             date: new Date(),
             username: "Anonymous",
             photo: `https://i.pravatar.cc/150?img=${Math.floor(
-                Math.random() * 70
+                Math.random() * 70,
             )}`,
         };
 
@@ -46,19 +52,19 @@ document
         messageServerService.sendMessage(message);
 
         update(msgs);
-
-        document
-            .getElementById("messages")
-            .lastElementChild.scrollIntoView({ behavior: "smooth" });
+        scrollToBottom();
     });
 
 // Attach the initial load of messages
 document.addEventListener("DOMContentLoaded", function () {
     const messageServerService = new MessageServerService();
-    messageServerService.getMessages().then((messages) => {
-        msgs.push(...messages);
-        update(msgs);
-    });
+    messageServerService
+        .getMessages()
+        .then((messages) => {
+            msgs.push(...messages);
+            update(msgs);
+        })
+        .then(scrollToBottom);
 });
 
 function update(arrayOfMessages) {
@@ -72,7 +78,7 @@ function update(arrayOfMessages) {
         clone.querySelector(".messageRowTemplate_content").textContent =
             message.content;
         clone.querySelector(".messageRowTemplate_date").textContent = new Date(
-            message.date
+            message.date,
         ).toLocaleTimeString();
         clone.querySelector(".messageRowTemplate_username").textContent =
             message.username;
