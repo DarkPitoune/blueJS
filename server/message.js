@@ -18,16 +18,22 @@ const validateMessage = (message) => {
     return { content, username, date, photo };
 };
 
+const allMessages = [];
+let lastId = 0;
+
 const postMessage = (messageData) => {
-    return "postMessage";
+    const newMessage = { id: lastId, ...messageData };
+    allMessages.push(newMessage);
+    lastId++;
+    return newMessage;
 };
 
 const getMessage = (req, res) => {
     res.send("getMessage");
 };
 
-const getAllMessages = (req, res) => {
-    res.send("getAllMessages");
+const getAllMessages = () => {
+    return allMessages;
 };
 
 const getMessagesNumber = (req, res) => {

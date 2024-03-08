@@ -10,6 +10,8 @@ const {
 const express = require("express");
 let app = express(); //instanciation d'une application Express
 
+app.use(express.json());
+
 // Pour s'assurer que l'on peut faire des appels AJAX au serveur
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -36,7 +38,7 @@ app.post("/msg", (req, res) => {
 
     try {
         const newMessage = postMessage(messageData);
-        res.status(201).send(newMessage);
+        res.status(201).json(newMessage);
     } catch (error) {
         res.status(500).send(error.message);
     }
@@ -46,7 +48,8 @@ app.get("/msg/:id", (req, res) => {
     getMessage(req, res);
 });
 app.get("/msg", (req, res) => {
-    getAllMessages(req, res);
+    const allMessages = getAllMessages();
+    return res.status(200).json(allMessages);
 });
 app.get("/msg/nber", (req, res) => {
     getMessagesNumber(req, res);
