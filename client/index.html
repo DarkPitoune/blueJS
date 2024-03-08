@@ -49,14 +49,17 @@
         </script>
     </head>
 
-    <body class="bg-sea">
+    <body class="bg-sea flex h-screen flex-col">
         <header
             class="bg-sky box-shadow shadow-sky px-6 py-3 text-3xl text-white"
         >
             <span id="logo"><span class="text-5xl">B</span>lue</span>
         </header>
-        <div class="flex flex-col items-center">
-            <div id="messages" class="max-w-4xl"></div>
+        <div class="flex h-full grow flex-col items-center">
+            <div
+                id="messages"
+                class="min-h-0 w-[800px] max-w-full grow bg-white"
+            ></div>
             <form id="newMessageForm" onsubmit="javascript:addMessage">
                 <textarea
                     id="message"
@@ -66,6 +69,12 @@
                 <button type="submit">Envoyer</button>
             </form>
         </div>
+        <template id="messageRowTemplate">
+            <div id="messageRowTemplate_date"></div>
+            <div id="messageRowTemplate_content"></div>
+            <img id="messageRowTemplate_photo" />
+            <div id="messageRowTemplate_username"></div>
+        </template>
     </body>
 
     <script src="script.js"></script>
