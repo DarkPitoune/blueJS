@@ -1,14 +1,14 @@
-import {
+const {
     postMessage,
     getMessage,
     getAllMessages,
     getMessagesNumber,
     delMessage,
-} from "./message.js";
+    validateMessage,
+} = require("./message.js");
 
-import express from "express";
-//var express = require("express"); //import de la bibliothèque Express
-var app = express(); //instanciation d'une application Express
+const express = require("express");
+let app = express(); //instanciation d'une application Express
 
 // Pour s'assurer que l'on peut faire des appels AJAX au serveur
 app.use(function (req, res, next) {
@@ -26,19 +26,32 @@ app.get("/", function (req, res) {
     res.send("Hello");
 });
 
-app.post("/msg/post/:msg", (req, res) => {
-    postMessage(req, res);
+app.post("/msg", (req, res) => {
+    let messageData;
+    try {
+        messageData = validateMessage(req.body);
+    } catch (error) {
+        res.status(400).send(error.message);
+    }
+
+    try {
+        const newMessage = postMessage(messageData);
+        res.status(201).send(newMessage);
+    } catch (error) {
+        res.status(500).send(error.message);
+    }
 });
-app.get("/msg/get/:id", (req, res) => {
+
+app.get("/msg/:id", (req, res) => {
     getMessage(req, res);
 });
-app.get("/msg/getAll", (req, res) => {
+app.get("/msg", (req, res) => {
     getAllMessages(req, res);
 });
 app.get("/msg/nber", (req, res) => {
     getMessagesNumber(req, res);
 });
-app.get("/msg/del/:id", (req, res) => {
+app.delete("/msg/:id", (req, res) => {
     delMessage(req, res);
 });
 

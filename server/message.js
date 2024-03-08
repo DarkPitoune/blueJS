@@ -1,19 +1,48 @@
-export const postMessage = (req, res) => {
-    res.send("postMessage");
+const validateMessage = (message) => {
+    const content = message?.content;
+
+    if (!content) {
+        throw new Error("content is required");
+    }
+
+    const username = message?.username;
+    if (!username) {
+        throw new Error("username is required");
+    }
+    const date = message?.date;
+    if (!date) {
+        throw new Error("date is required");
+    }
+    const photo = message?.photo;
+
+    return { content, username, date, photo };
 };
 
-export const getMessage = (req, res) => {
+const postMessage = (messageData) => {
+    return "postMessage";
+};
+
+const getMessage = (req, res) => {
     res.send("getMessage");
 };
 
-export const getAllMessages = (req, res) => {
+const getAllMessages = (req, res) => {
     res.send("getAllMessages");
 };
 
-export const getMessagesNumber = (req, res) => {
+const getMessagesNumber = (req, res) => {
     res.send("getMessagesNumber");
 };
 
-export const delMessage = (req, res) => {
+const delMessage = (req, res) => {
     res.send("delMessage");
+};
+
+module.exports = {
+    postMessage,
+    getMessage,
+    getAllMessages,
+    getMessagesNumber,
+    delMessage,
+    validateMessage,
 };
