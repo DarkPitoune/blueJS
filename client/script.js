@@ -7,7 +7,14 @@ document
         const form = e.target;
         const message = new FormData(form).get("message");
         form.reset();
-        msgs.push({ msg: message });
+        msgs.push({
+            msg: message,
+            date: new Date(),
+            username: "Anonymous",
+            photo: `https://i.pravatar.cc/150?img=${Math.floor(
+                Math.random() * 70
+            )}`,
+        });
         update(msgs);
     });
 
@@ -17,16 +24,18 @@ function update(arrayOfMessages) {
     console.log(arrayOfMessages);
 
     arrayOfMessages.forEach(function (message) {
-        var article = document.createElement("article");
-        var div = document.createElement("div");
-        div.className = "flex justify-between";
-        var h3 = document.createElement("h3");
-        var span = document.createElement("span");
-        h3.innerText = message.msg;
-        span.innerText = "Jean Michel";
-        div.appendChild(h3);
-        div.appendChild(span);
-        article.appendChild(div);
-        parent.appendChild(article);
+        var template = document.querySelector("#messageRowTemplate");
+        var clone = document.importNode(template.content, true);
+
+        console.log(clone);
+
+        clone.querySelector(".messageRowTemplate_content").textContent =
+            message.msg;
+        clone.querySelector(".messageRowTemplate_date").textContent =
+            message.date.toLocaleTimeString();
+        clone.querySelector(".messageRowTemplate_username").textContent =
+            message.username;
+        clone.querySelector(".messageRowTemplate_photo").src = message.photo;
+        parent.appendChild(clone);
     });
 }
