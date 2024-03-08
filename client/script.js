@@ -77,6 +77,8 @@ function update(arrayOfMessages) {
         clone.querySelector(".messageRowTemplate_username").textContent =
             message.username;
         clone.querySelector(".messageRowTemplate_photo").src = message.photo;
+
+        parent.appendChild(clone);
     });
 
     arrayOfMessages.forEach(function (message, index) {
