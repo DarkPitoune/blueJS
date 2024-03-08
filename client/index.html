@@ -1,91 +1,65 @@
 <!doctype html>
 <html lang="fr">
-    <head>
-        <meta name="description" content="Chat, laugh, hate : Blue!" />
-        <link rel="icon" href="static/favicon.ico" />
-        <link
-            rel="apple-touch-icon"
-            sizes="180x180"
-            href="static/apple-touch-icon.png"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="32x32"
-            href="static/favicon-32x32.png"
-        />
-        <link
-            rel="icon"
-            type="image/png"
-            sizes="16x16"
-            href="static/favicon-16x16.png"
-        />
-        <link
-            rel="mask-icon"
-            href="static/safari-pinned-tab.svg"
-            color="#039aff"
-        />
-        <meta name="msapplication-TileColor" content="#039aff" />
-        <meta name="theme-color" content="#039aff" />
-        <meta charset="UTF-8" />
-        <title>BlueJS</title>
-        <meta name="viewport" content="width=device-width" />
-        <link rel="stylesheet" href="style.css" />
-        <script src="https://cdn.tailwindcss.com"></script>
-        <style>
-            @import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
-        </style>
-        <script>
-            tailwind.config = {
-                theme: {
-                    extend: {
-                        colors: {
-                            sky: "#039aff",
-                            sea: "#e4e9f0",
-                        },
+
+<head>
+    <meta name="description" content="Chat, laugh, hate : Blue!" />
+    <link rel="icon" href="static/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="static/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="static/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="static/favicon-16x16.png" />
+    <link rel="mask-icon" href="static/safari-pinned-tab.svg" color="#039aff" />
+    <meta name="msapplication-TileColor" content="#039aff" />
+    <meta name="theme-color" content="#039aff" />
+    <meta charset="UTF-8" />
+    <title>BlueJS</title>
+    <meta name="viewport" content="width=device-width" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        sky: "#039aff",
+                        sea: "#e4e9f0",
                     },
                 },
-            };
-        </script>
-    </head>
+            },
+        };
+    </script>
+</head>
 
-    <body class="bg-sea flex h-screen flex-col">
-        <header
-            class="bg-sky box-shadow shadow-sky px-6 py-3 text-3xl text-white"
-        >
-            <span id="logo"><span class="text-5xl">B</span>lue</span>
-        </header>
-        <div class="flex h-full grow flex-col items-center gap-4 py-2">
-            <div
-                id="messages"
-                class="min-h-0 w-[800px] max-w-full grow rounded-lg bg-white"
-            ></div>
-            <form
-                id="newMessageForm"
-                class="flex w-[800px] max-w-full items-center gap-6"
-            >
-                <textarea
-                    class="shadow-sky h-10 grow resize-none rounded-full px-3 leading-10 focus:outline-none"
-                    id="message"
-                    name="message"
-                    placeholder="Your message"
-                    required
-                ></textarea>
-                <button
-                    type="submit"
-                    class="bg-sky focus:shadow-outline rounded-full px-4 py-2 font-bold text-white transition hover:bg-blue-700 focus:bg-blue-700 focus:outline-none"
-                >
-                    Envoyer
-                </button>
-            </form>
+<body class="bg-sea flex h-screen flex-col">
+    <header class="bg-sky box-shadow shadow-sky px-6 py-3 text-3xl text-white">
+        <span id="logo"><span class="text-5xl">B</span>lue</span>
+    </header>
+    <div class="flex h-full min-h-0 grow flex-col items-center gap-4 py-6">
+        <div id="messages" class="min-h-0 w-[800px] max-w-full grow overflow-y-auto rounded-lg flex flex-col gap-8">
         </div>
-        <template id="messageRowTemplate">
-            <div class="messageRowTemplate_date"></div>
-            <div class="messageRowTemplate_content"></div>
-            <img class="messageRowTemplate_photo" />
-            <div class="messageRowTemplate_username"></div>
-        </template>
-    </body>
+        <form id="newMessageForm" class="flex w-[800px] max-w-full items-center gap-6">
+            <textarea class="shadow-sky h-10 grow resize-none rounded-full px-3 leading-10 focus:outline-none"
+                id="message" name="message" placeholder="Your message" required></textarea>
+            <button type="submit"
+                class="bg-sky focus:shadow-outline rounded-full px-4 py-2 font-bold text-white transition hover:bg-blue-700 focus:bg-blue-700 focus:outline-none">
+                Envoyer
+            </button>
+        </form>
+    </div>
+    <template id="messageRowTemplate">
+        <article class="flex gap-4">
+            <img class="messageRowTemplate_photo h-10 w-10 rounded-full" />
+            <div class="bg-white ">
+                <div class="messageRowTemplate_date"></div>
+                <div class="messageRowTemplate_content"></div>
+                <div class="messageRowTemplate_username"></div>
+                <div>
+        </article>
+    </template>
+</body>
 
-    <script src="script.js"></script>
+<script src="script.js"></script>
+
 </html>
