@@ -16,6 +16,10 @@ document
             )}`,
         });
         update(msgs);
+
+        document
+            .getElementById("messages")
+            .lastElementChild.scrollIntoView({ behavior: "smooth" });
     });
 
 function update(arrayOfMessages) {
@@ -26,9 +30,6 @@ function update(arrayOfMessages) {
     arrayOfMessages.forEach(function (message, index) {
         var template = document.querySelector("#messageRowTemplate");
         var clone = document.importNode(template.content, true);
-
-        console.log(clone);
-
         clone.querySelector(".messageRowTemplate_content").textContent =
             message.msg;
         clone.querySelector(".messageRowTemplate_date").textContent =
@@ -37,9 +38,5 @@ function update(arrayOfMessages) {
             message.username;
         clone.querySelector(".messageRowTemplate_photo").src = message.photo;
         parent.appendChild(clone);
-
-        if (index === arrayOfMessages.length - 1) {
-            clone.scrollIntoView({ behavior: "smooth" });
-        }
     });
 }
