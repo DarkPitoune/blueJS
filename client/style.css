@@ -4,8 +4,8 @@
     font-style: normal;
 }
 
-article {
+.messageRowTemplate_content {
     font-family: "Comic Neue", cursive;
-    font-weight: 400;
+    font-weight: 500;
     font-style: normal;
 }

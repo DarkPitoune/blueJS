@@ -17,7 +17,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url("https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap");
-        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap')
+        @import url('https://fonts.googleapis.com/css2?family=Comic+Neue:ital,wght@0,300;0,400;0,700;1,300;1,400;1,700&display=swap');
     </style>
     <script>
         tailwind.config = {
@@ -27,9 +27,13 @@
                         sky: "#039aff",
                         sea: "#e4e9f0",
                     },
-                },
-            },
-        };
+                    fontSize: {
+                        "xs": ".75rem",
+                        "2xs": ".625rem",
+                    },
+                }
+            }
+        }
     </script>
 </head>
 
@@ -54,9 +58,9 @@
             <img class="messageRowTemplate_photo h-10 w-10 rounded-full" />
             <div class="bg-white px-4 py-2 rounded-lg relative min-w-0">
                 <div class="absolute top-0 border-8 -left-2 border-transparent border-t-white"></div>
-                <div class="messageRowTemplate_date"></div>
+                <div class="messageRowTemplate_username text-sm bold text-xs"></div>
                 <div class="messageRowTemplate_content text-wrap break-words"></div>
-                <div class="messageRowTemplate_username"></div>
+                <div class="messageRowTemplate_date text-right italic text-gray-500 text-2xs"></div>
                 <div>
         </article>
     </template>
