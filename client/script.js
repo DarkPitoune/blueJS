@@ -2,6 +2,10 @@ const msgs = [];
 
 const SERVER_URL = "https://blue-js-api.vercel.app/msg";
 
+const randomColors = Array.from({ length: 30 }, (_a, index) => {
+    return `hsl(${index * 27}, 40%, 50%)`;
+});
+
 class MessageServerService {
     sendMessage(message) {
         fetch(SERVER_URL, {
@@ -66,15 +70,21 @@ function update(arrayOfMessages) {
         var template = document.querySelector("#messageRowTemplate");
         var clone = document.importNode(template.content, true);
         clone.querySelector(".messageRowTemplate_content").textContent =
-            message.msg;
-        clone.querySelector(".messageRowTemplate_username").style.color =
-            message.username;
+            message.content;
         clone.querySelector(".messageRowTemplate_date").textContent = new Date(
             message.date
         ).toLocaleTimeString();
         clone.querySelector(".messageRowTemplate_username").textContent =
             message.username;
         clone.querySelector(".messageRowTemplate_photo").src = message.photo;
-        parent.appendChild(clone);
+    });
+
+    arrayOfMessages.forEach(function (message, index) {
+        // ith message
+        var messageDiv = parent.children[index];
+        console.log(randomColors);
+        messageDiv.querySelector(".messageRowTemplate_username").style.color =
+            randomColors[message.username.length % randomColors.length];
+        // arrayOfMessages[index].username;
     });
 }
