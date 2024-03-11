@@ -6,8 +6,12 @@ const randomColors = Array.from({ length: 30 }, (_a, index) => {
     return `hsl(${index * 27}, 40%, 50%)`;
 });
 
-const getUserName = () =>
-    (storedUsername = localStorage.getItem("username") || "Anonymous");
+const getUserName = () => localStorage.getItem("username") || "Anonymous";
+
+const randomPhoto = `https://i.pravatar.cc/150?img=${Math.floor(
+    Math.random() * 70,
+)}`;
+const getUserPhoto = () => localStorage.getItem("photo") || randomPhoto;
 
 class MessageServerService {
     sendMessage(message) {
@@ -44,9 +48,7 @@ document
             content: formData.get("message"),
             date: new Date(),
             username: getUserName(),
-            photo: `https://i.pravatar.cc/150?img=${Math.floor(
-                Math.random() * 70,
-            )}`,
+            photo: getUserPhoto(),
         };
 
         msgs.push(message);
@@ -103,21 +105,35 @@ function update(arrayOfMessages) {
 }
 
 // everything related to the username input
+const getUserNameInput = () => document.querySelector("#usernameInput");
+
 function syncUsername(textValue) {
     if (textValue.length > 15) textValue = textValue.slice(0, 15);
-    document.querySelector("#usernameInput").value = textValue;
-    document.querySelector("#usernameInput").style.width =
-        textValue.length + "ch";
+    getUserNameInput().value = textValue;
+    getUserNameInput().style.width = textValue.length + "ch";
 }
 
-document
-    .querySelector("#usernameInput")
-    .addEventListener("input", (e) => syncUsername(e.target.value));
+getUserNameInput().addEventListener("input", (e) =>
+    syncUsername(e.target.value),
+);
 
-document.querySelector("#usernameInput").addEventListener("blur", function (e) {
+getUserNameInput().addEventListener("blur", function (e) {
     localStorage.setItem("username", e.target.value);
 });
 
 document.addEventListener("DOMContentLoaded", () => {
     syncUsername(getUserName());
+});
+
+// everything related to the photo input
+const getUserPhotoInput = () => document.querySelector("#photoInput");
+const getProfilePhoto = () => document.querySelector("#profilePhoto");
+
+getUserPhotoInput().addEventListener("blur", (e) => {
+    getProfilePhoto().src = e.target.value;
+    localStorage.setItem("photo", e.target.value);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    getProfilePhoto().src = getUserPhoto();
 });

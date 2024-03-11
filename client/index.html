@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="en">
 
 <head>
     <meta name="description" content="Chat, laugh, hate : Blue!" />
@@ -8,6 +8,7 @@
     <link rel="icon" type="image/png" sizes="32x32" href="static/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="static/favicon-16x16.png" />
     <link rel="mask-icon" href="static/safari-pinned-tab.svg" color="#039aff" />
+    <script src="https://unpkg.com/alpinejs" defer></script>
     <meta name="msapplication-TileColor" content="#039aff" />
     <meta name="theme-color" content="#039aff" />
     <meta charset="UTF-8" />
@@ -43,12 +44,19 @@
     <header
         class="bg-sky dark:bg-darkSky box-shadow shadow-sky px-6 py-3 text-3xl text-white flex justify-between items-center">
         <span id="logo"><span class="text-5xl">B</span>lue</span>
-        <div class="text-base flex">Hello <input spellcheck="false" id="usernameInput"
+        <div class="relative text-base flex items-center" x-data="{ open: false }">
+            Hello <input spellcheck="false" id="usernameInput"
                 class="mx-2 bg-transparent relative focus:outline-none after:block after:absolute after:bottom-0 after:w-0 after:focus:w-full after:h-px after:bg-white font-mono" />
-            !</div>
+            !
+            <img x-show="!open" alt="profile pic" id="profilePhoto" x-on:click="open = true"
+                src='https://as2.ftcdn.net/v2/jpg/03/31/69/91/1000_F_331699188_lRpvqxO5QRtwOM05gR50ImaaJgBx68vi.jpg'
+                class="h-10 w-10 ml-2 rounded-full" />
+            <input id="photoInput" x-show="open" type="text" x-on:keydown.enter="open = false" x-on:blur="open = false"
+                class="text-black ml-2" x-ref="usernameInput" placeholder="your profile pic" />
+        </div>
     </header>
-    <div class="flex h-full min-h-0 grow flex-col items-center pb-6">
-        <div id="messages" class="min-h-0 w-[800px] max-w-full grow overflow-y-auto flex flex-col gap-4 py-4">
+    <div class=" flex h-full min-h-0 grow flex-col items-center">
+        <div id="messages" class="min-h-0 w-[800px] max-w-full grow overflow-y-auto flex flex-col gap-4 py-4 px-2">
         </div>
         <template id="messageRowTemplate">
             <article class="flex gap-4 dark:text-white">
@@ -63,7 +71,7 @@
                     <div>
             </article>
         </template>
-        <form id="newMessageForm" class="flex w-[800px] max-w-full items-center gap-4" autocomplete="off">
+        <form id="newMessageForm" class="flex w-[800px] max-w-full items-center gap-4 px-2" autocomplete="off">
             <input
                 class="shadow-sky h-10 grow resize-none rounded-full px-3 leading-10 focus:outline-none dark:bg-black dark:text-white"
                 id="message" name="message" placeholder="Your message" required />
@@ -72,6 +80,9 @@
                 Send
             </button>
         </form>
+        <footer class="text-gray-500 text-xs pt-2">
+            Change your device's theme to see the magic happen!
+        </footer>
     </div>
 </body>
 
