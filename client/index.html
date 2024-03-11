@@ -40,13 +40,30 @@
 </head>
 
 <body class="bg-sea dark:bg-darkSea flex h-screen flex-col">
-    <header class="bg-sky dark:bg-darkSky box-shadow shadow-sky px-6 py-3 text-3xl text-white">
+    <header
+        class="bg-sky dark:bg-darkSky box-shadow shadow-sky px-6 py-3 text-3xl text-white flex justify-between items-center">
         <span id="logo"><span class="text-5xl">B</span>lue</span>
+        <div class="text-base flex">Hello <input spellcheck="false" id="usernameInput"
+                class="mx-2 bg-transparent relative focus:outline-none after:block after:absolute after:bottom-0 after:w-0 after:focus:w-full after:h-px after:bg-white font-mono" />
+            !</div>
     </header>
     <div class="flex h-full min-h-0 grow flex-col items-center pb-6">
         <div id="messages" class="min-h-0 w-[800px] max-w-full grow overflow-y-auto flex flex-col gap-4 py-4">
         </div>
-        <form id="newMessageForm" class="flex w-[800px] max-w-full items-center gap-4">
+        <template id="messageRowTemplate">
+            <article class="flex gap-4 dark:text-white">
+                <img class="messageRowTemplate_photo h-10 w-10 rounded-full" />
+                <div class="bg-white px-4 py-2 rounded-lg relative min-w-0 dark:bg-black">
+                    <div
+                        class="bubble_tip absolute top-0 border-8 border-transparent border-t-white dark:border-t-black">
+                    </div>
+                    <div class="messageRowTemplate_username text-sm bold text-xs"></div>
+                    <div class="messageRowTemplate_content text-wrap break-words"></div>
+                    <div class="messageRowTemplate_date text-right italic text-gray-500 text-2xs"></div>
+                    <div>
+            </article>
+        </template>
+        <form id="newMessageForm" class="flex w-[800px] max-w-full items-center gap-4" autocomplete="off">
             <input
                 class="shadow-sky h-10 grow resize-none rounded-full px-3 leading-10 focus:outline-none dark:bg-black dark:text-white"
                 id="message" name="message" placeholder="Your message" required />
@@ -56,18 +73,6 @@
             </button>
         </form>
     </div>
-    <template id="messageRowTemplate">
-        <article class="flex gap-4 dark:text-white">
-            <img class="messageRowTemplate_photo h-10 w-10 rounded-full" />
-            <div class="bg-white px-4 py-2 rounded-lg relative min-w-0 dark:bg-black">
-                <div class="absolute top-0 border-8 -left-2 border-transparent border-t-white dark:border-t-black">
-                </div>
-                <div class="messageRowTemplate_username text-sm bold text-xs"></div>
-                <div class="messageRowTemplate_content text-wrap break-words"></div>
-                <div class="messageRowTemplate_date text-right italic text-gray-500 text-2xs"></div>
-                <div>
-        </article>
-    </template>
 </body>
 
 <script src="script.js"></script>

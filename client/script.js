@@ -6,6 +6,9 @@ const randomColors = Array.from({ length: 30 }, (_a, index) => {
     return `hsl(${index * 27}, 40%, 50%)`;
 });
 
+const getUserName = () =>
+    (storedUsername = localStorage.getItem("username") || "Anonymous");
+
 class MessageServerService {
     sendMessage(message) {
         fetch(SERVER_URL, {
@@ -24,10 +27,8 @@ class MessageServerService {
 
 const messageServerService = new MessageServerService();
 
-const scrollToBottom = () => {
-    document
-        .getElementById("messages")
-        .lastElementChild.scrollIntoView({ behavior: "smooth" });
+const scrollToBottom = (opts = {}) => {
+    document.getElementById("messages").lastElementChild.scrollIntoView(opts);
 };
 
 // Attach the post message handler
@@ -42,7 +43,7 @@ document
         const message = {
             content: formData.get("message"),
             date: new Date(),
-            username: "Anonymous",
+            username: getUserName(),
             photo: `https://i.pravatar.cc/150?img=${Math.floor(
                 Math.random() * 70,
             )}`,
@@ -52,7 +53,7 @@ document
         messageServerService.sendMessage(message);
 
         update(msgs);
-        scrollToBottom();
+        scrollToBottom({ behavior: "smooth" });
     });
 
 // Attach the initial load of messages
@@ -70,7 +71,6 @@ document.addEventListener("DOMContentLoaded", function () {
 function update(arrayOfMessages) {
     var parent = document.getElementById("messages");
     parent.innerHTML = "";
-    console.log(arrayOfMessages);
 
     arrayOfMessages.forEach(function (message, index) {
         var template = document.querySelector("#messageRowTemplate");
@@ -84,15 +84,40 @@ function update(arrayOfMessages) {
             message.username;
         clone.querySelector(".messageRowTemplate_photo").src = message.photo;
 
+        didISendTheMessage =
+            message.username === getUserName() &&
+            message.username !== "Anonymous";
+
+        clone
+            .querySelector("article")
+            .classList.add(didISendTheMessage ? "sent" : "received");
+
         parent.appendChild(clone);
     });
 
     arrayOfMessages.forEach(function (message, index) {
-        // ith message
         var messageDiv = parent.children[index];
-        console.log(randomColors);
         messageDiv.querySelector(".messageRowTemplate_username").style.color =
             randomColors[message.username.length % randomColors.length];
-        // arrayOfMessages[index].username;
     });
 }
+
+// everything related to the username input
+function syncUsername(textValue) {
+    if (textValue.length > 15) textValue = textValue.slice(0, 15);
+    document.querySelector("#usernameInput").value = textValue;
+    document.querySelector("#usernameInput").style.width =
+        textValue.length + "ch";
+}
+
+document
+    .querySelector("#usernameInput")
+    .addEventListener("input", (e) => syncUsername(e.target.value));
+
+document.querySelector("#usernameInput").addEventListener("blur", function (e) {
+    localStorage.setItem("username", e.target.value);
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+    syncUsername(getUserName());
+});

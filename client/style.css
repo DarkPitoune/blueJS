@@ -9,3 +9,15 @@
     font-weight: 500;
     font-style: normal;
 }
+
+.sent {
+    flex-direction: row-reverse;
+}
+
+.sent .bubble_tip {
+    right: -0.5rem;
+}
+
+.received .bubble_tip {
+    left: -0.5rem;
+}
