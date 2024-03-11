@@ -19,9 +19,8 @@ const authToken = process.env.TURSO_TOKEN;
 if (!url || !authToken)
     throw Error("TURSO_URL and TURSO_TOKEN must be set in environment");
 
-const db = new Database(url, { authToken });
-
 function initDb() {
+    const db = new Database(url, { authToken });
     db.exec(`CREATE TABLE IF NOT EXISTS messages (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   content TEXT NOT NULL,
@@ -37,6 +36,8 @@ app.use(function (req, res, next) {
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept",
     );
+    const db = new Database(url, { authToken });
+    req.db = db;
     next();
 });
 
@@ -56,7 +57,7 @@ app.post("/msg", (req, res) => {
     }
 
     try {
-        const newMessage = postMessage(db, messageData);
+        const newMessage = postMessage(req.db, messageData);
         res.status(201).json(newMessage);
     } catch (error) {
         res.status(500).send(error.message);
@@ -65,7 +66,7 @@ app.post("/msg", (req, res) => {
 
 // Must be placed before /msg/:id
 app.get("/msg/nber", (req, res) => {
-    res.status(200).json(getMessagesNumber(db));
+    res.status(200).json(getMessagesNumber(req.db));
 });
 
 app.get("/msg/:id", (req, res) => {
@@ -75,7 +76,7 @@ app.get("/msg/:id", (req, res) => {
     }
     try {
         const id = parseInt(req.params.id);
-        const message = getMessage(db, id);
+        const message = getMessage(req.db, id);
         res.status(200).json(message);
     } catch (error) {
         res.status(404).send(error.message);
@@ -83,7 +84,7 @@ app.get("/msg/:id", (req, res) => {
 });
 
 app.get("/msg", (req, res) => {
-    const allMessages = getAllMessages(db);
+    const allMessages = getAllMessages(req.db);
     return res.status(200).json(allMessages);
 });
 
@@ -94,7 +95,7 @@ app.delete("/msg/:id", (req, res) => {
     }
     try {
         const id = parseInt(req.params.id);
-        delMessage(db, id);
+        delMessage(req.db, id);
         res.status(200).json(message);
     } catch (error) {
         res.status(404).send(error.message);
