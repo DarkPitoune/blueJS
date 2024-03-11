@@ -2,6 +2,46 @@
 # yarn lockfile v1
 
 
+"@libsql/darwin-arm64@0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@libsql/darwin-arm64/-/darwin-arm64-0.3.8.tgz#6844d50868ff928241645a86e3539275bcff8335"
+  integrity sha512-uh9dfDsmx0NfBjJbFm8APPD8E5s18mxmmmuH4IdSTl/xdv9URAeYo8zv9s2SHgM62QbUUcokLDzLgFfOGSsFBA==
+
+"@libsql/darwin-x64@0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@libsql/darwin-x64/-/darwin-x64-0.3.8.tgz#1712c89a7b65dfae338c8bb4eefbae9317fbf51e"
+  integrity sha512-+5CSFTMs86thuUJW2emzCqrZunueR4ilUV9J1HeZgUtSiQg32/z5GdCR0027JgALqB++yhFGY4WK4SNAPWdKaA==
+
+"@libsql/linux-arm64-gnu@0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@libsql/linux-arm64-gnu/-/linux-arm64-gnu-0.3.8.tgz#7c08ff2fa2682b24a3ecdfa09a2596a2cf8a2eb4"
+  integrity sha512-s9blvMx2tA0HGnTHUhEtZZoBLoZqaTxVyjM4qFrxJO84GP902N/DXtbxO2ib6Jbs5rom+78DkpHmi7PzBDLCZA==
+
+"@libsql/linux-arm64-musl@0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@libsql/linux-arm64-musl/-/linux-arm64-musl-0.3.8.tgz#ac5cd5a8dfe5a1029fc9feab0421cb0d3876d963"
+  integrity sha512-Gw+g5GbeAXdONzpmKVvvdIk/8cCjn0MeN8KNm59xbuwWnkA0NCz94UMD725xOoyl3z+olBxhAdE5yEznLSTcag==
+
+"@libsql/linux-x64-gnu@0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@libsql/linux-x64-gnu/-/linux-x64-gnu-0.3.8.tgz#18191a71c7d7e6a9aacf569b224e69ca4cfeda75"
+  integrity sha512-XRpzXlbM0ZvPVB8/bhun/4dhRUt4PBo1zTz0njaWo/EQoZNGQkps1IZv7v3wR40Kcug4qvmuXTCGuYPQN4QI7w==
+
+"@libsql/linux-x64-musl@0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@libsql/linux-x64-musl/-/linux-x64-musl-0.3.8.tgz#b652e11926eb3500dabbaf02559523db82343cbc"
+  integrity sha512-gjqjqXpSBj3aB7Q2D0zgoYlquJr8WkPXaByjXE4XYNzcRRg6o+q3V3Uv9s6yhKBoLiBsltUETFJLCoQNzUv9kA==
+
+"@libsql/win32-x64-msvc@0.3.8":
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/@libsql/win32-x64-msvc/-/win32-x64-msvc-0.3.8.tgz#39751a54d25c5c9d86cbb41974567f16d73c1796"
+  integrity sha512-KbqqgbL2iBciVFZSJ//36U0Fr6P6AAcLpJPqVckRdNOC43whZlKNglmjtzQDOq3+UVieC8OkLUPEDShRIcSDZA==
+
+"@neon-rs/load@^0.0.4":
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/@neon-rs/load/-/load-0.0.4.tgz#2a2a3292c6f1fef043f49886712d3c96a547532e"
+  integrity sha512-kTPhdZyTQxB+2wpiRcFWrDcejc4JI6tkPuS7UZCG4l6Zvc5kU/gGQ/ozvHTh1XR5tS+UlfAfGuPajjzQjCiHCw==
+
 accepts@~1.3.8:
   version "1.3.8"
   resolved "https://registry.yarnpkg.com/accepts/-/accepts-1.3.8.tgz#0bf0be125b67014adcb0b0921e62db7bffe16b2e"
@@ -96,6 +136,16 @@ destroy@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/destroy/-/destroy-1.2.0.tgz#4803735509ad8be552934c67df614f94e66fa015"
   integrity sha512-2sJGJTaXIIaR1w4iJSNoN0hnMY7Gpc/n8D4qSCJw8QqFWXf7cuAgnEHxBpweaVcPevC2l3KpjYCx3NypQQgaJg==
+
+detect-libc@2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/detect-libc/-/detect-libc-2.0.2.tgz#8ccf2ba9315350e1241b88d0ac3b0e1fbd99605d"
+  integrity sha512-UX6sGumvvqSaXgdKGUsgZWqcUyIXZ/vZTrlRT/iobiKhGL0zL4d3osHj3uqllWJK+i+sixDS/3COVEOFbupFyw==
+
+dotenv@^16.4.5:
+  version "16.4.5"
+  resolved "https://registry.yarnpkg.com/dotenv/-/dotenv-16.4.5.tgz#cdd3b3b604cb327e286b4762e13502f717cb099f"
+  integrity sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==
 
 ee-first@1.1.1:
   version "1.1.1"
@@ -263,6 +313,22 @@ ipaddr.js@1.9.1:
   version "1.9.1"
   resolved "https://registry.yarnpkg.com/ipaddr.js/-/ipaddr.js-1.9.1.tgz#bff38543eeb8984825079ff3a2a8e6cbd46781b3"
   integrity sha512-0KI/607xoxSToH7GjN1FfSbLoU0+btTicjsQSWQlh/hZykN8KpmMf7uYwPW3R+akZ6R/w18ZlXSHBYXiYUPO3g==
+
+libsql@^0.3.8:
+  version "0.3.8"
+  resolved "https://registry.yarnpkg.com/libsql/-/libsql-0.3.8.tgz#bc16193b16a4f5c99c039348568029cb29207e43"
+  integrity sha512-tz12gCfDXl6WKwtpxpw6PaZtkecHQQQTHuuj6RLQvEfOB17bPpmo8xdC55S4J6fx6qzmqJbaLZSlA6gYJgUXkg==
+  dependencies:
+    "@neon-rs/load" "^0.0.4"
+    detect-libc "2.0.2"
+  optionalDependencies:
+    "@libsql/darwin-arm64" "0.3.8"
+    "@libsql/darwin-x64" "0.3.8"
+    "@libsql/linux-arm64-gnu" "0.3.8"
+    "@libsql/linux-arm64-musl" "0.3.8"
+    "@libsql/linux-x64-gnu" "0.3.8"
+    "@libsql/linux-x64-musl" "0.3.8"
+    "@libsql/win32-x64-msvc" "0.3.8"
 
 media-typer@0.3.0:
   version "0.3.0"

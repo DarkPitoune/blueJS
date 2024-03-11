@@ -18,38 +18,39 @@ const validateMessage = (message) => {
     return { content, username, date, photo };
 };
 
-const allMessages = [];
-let lastId = 0;
-
-const postMessage = (messageData) => {
-    const newMessage = { id: lastId, ...messageData };
-    allMessages.push(newMessage);
-    lastId++;
-    return newMessage;
+const postMessage = (db, messageData) => {
+    db.prepare(
+        "INSERT INTO messages (content, username, date, photo) VALUES (?, ?, ?, ?)",
+    ).get(
+        messageData.content,
+        messageData.username,
+        messageData.date,
+        messageData.photo,
+    );
+    return {
+        id: db.prepare("SELECT last_insert_rowid() as id").get().id,
+        ...messageData,
+    };
 };
 
-const getMessage = (id) => {
-    const message = allMessages.find((message) => message.id === id);
+const getMessage = (db, id) => {
+    const message = db.prepare("SELECT * FROM messages WHERE id = ?").get(id);
     if (!message) {
         throw new Error(`message with id ${id} not found`);
     }
     return message;
 };
 
-const getAllMessages = () => {
-    return allMessages;
+const getAllMessages = (db) => {
+    return db.prepare("SELECT * FROM messages").all();
 };
 
-const getMessagesNumber = () => {
-    return { count: allMessages.length };
+const getMessagesNumber = (db) => {
+    return db.prepare("SELECT COUNT(*) AS nber FROM messages").get().nber;
 };
 
-const delMessage = (id) => {
-    const index = allMessages.findIndex((message) => message.id === id);
-    if (index === -1) {
-        throw new Error(`message with id ${id} not found`);
-    }
-    allMessages.splice(index, 1);
+const delMessage = (db, id) => {
+    db.prepare("DELETE FROM messages WHERE id = ?").run(id);
 };
 
 module.exports = {

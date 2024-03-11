@@ -1,0 +1,19 @@
+meta {
+  name: create message
+  type: http
+  seq: 1
+}
+
+post {
+  url: http://localhost:8888/msg
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "content": "messge",
+    "username": "pitoune",
+    "date": "2020-12-07"
+  }
+}
