@@ -1,17 +1,13 @@
-var msgs = [];
-var chns = [];
-var openChannel = 1;
-
 const SERVER_URL = "https://blue-js-api.vercel.app/";
-
-const randomColors = Array.from({ length: 30 }, (_a, index) => {
-    return `hsl(${index * 27}, 40%, 50%)`;
-});
 
 const getUserName = () => localStorage.getItem("username") || "Anonymous";
 
 const defaultPhoto = `https://static.vecteezy.com/system/resources/previews/016/770/602/original/click-here-button-on-transparent-background-free-png.png`;
 const getUserPhoto = () => localStorage.getItem("photo") || defaultPhoto;
+
+/* -------------------------------------------------------------------------- */
+/*                       Services (link to the backend)                       */
+/* -------------------------------------------------------------------------- */
 
 class MessageServerService {
     sendMessage(message) {
@@ -25,17 +21,15 @@ class MessageServerService {
     }
 
     getMessages() {
-        return fetch(SERVER_URL + "msg/chn/" + openChannel).then((res) =>
-            res.json()
-        );
+        return fetch(
+            SERVER_URL + "msg/chn/" + appStateRegistry.openChannel
+        ).then((res) => res.json());
     }
 
     getMessage(id) {
         return fetch(SERVER_URL + "msg/" + id).then((res) => res.json());
     }
 }
-
-const messageServerService = new MessageServerService();
 
 class ChannelServerService {
     getChannels() {
@@ -58,71 +52,82 @@ class ChannelServerService {
     }
 }
 
+const messageServerService = new MessageServerService();
 const channelServerService = new ChannelServerService();
 
-const scrollToBottom = (opts = {}) => {
-    const msgListEl = document.getElementById("messages");
-    if (msgListEl.children.length > 0)
-        msgListEl.lastElementChild.scrollIntoView(opts);
-};
+/* -------------------------------------------------------------------------- */
+/*                              State managements                             */
+/* -------------------------------------------------------------------------- */
 
-// Attach the post message handler
-document
-    .getElementById("newMessageForm")
-    .addEventListener("submit", function (e) {
-        e.preventDefault();
-        const form = e.target;
-        const formData = new FormData(form);
-        form.reset();
+class AppStateRegistry {
+    messages = [];
+    channels = [];
+    openChannel = 1;
 
-        messageServerService.sendMessage({
-            content: formData.get("message"),
-            date: new Date(),
-            username: getUserName(),
-            photo: getUserPhoto(),
-            channel: openChannel,
+    fetchAndRenderMessages() {
+        messageServerService
+            .getMessages()
+            .then((messages) => {
+                this.messages = [...messages];
+                updateMessages(this.messages);
+            })
+            .then(scrollToBottom);
+    }
+
+    fetchAndRenderChannels() {
+        channelServerService.getChannels().then((channels) => {
+            this.channels = [...channels];
+            updateChannels(this.channels);
         });
-    });
+    }
 
-// Attach the create channel handler
-document
-    .getElementById("newChannelForm")
-    .addEventListener("submit", function (e) {
-        e.preventDefault();
-        const form = e.target;
-        const formData = new FormData(form);
-        form.reset();
-
-        channelServerService
-            .createChannel(formData.get("channelName"))
-            .then(() => {
-                channelServerService.getChannels().then((channels) => {
-                    chns = [];
-                    chns.push(...channels);
-                    updateChannels(chns);
-                });
+    createAndRefetchChannels(name) {
+        channelServerService.createChannel(name).then(() => {
+            channelServerService.getChannels().then((channels) => {
+                this.channels = [];
+                this.channels.push(...channels);
+                updateChannels(this.channels);
             });
-    });
+        });
+    }
 
-// Attach the initial load of messages and channels
-const fetchAndRenderMessages = () => {
-    messageServerService
-        .getMessages()
-        .then((messages) => {
-            msgs = messages;
-            updateMessages(msgs);
-        })
-        .then(scrollToBottom);
-};
+    changeChannel(channelId) {
+        if (channelId === this.openChannel) return;
+        this.openChannel = channelId;
+        this.markAsUpToDate(channelId);
+        this.fetchAndRenderMessages();
+    }
 
-document.addEventListener("DOMContentLoaded", function () {
-    fetchAndRenderMessages();
+    addMessage(message) {
+        this.messages.push(message);
+    }
 
-    channelServerService.getChannels().then((channels) => {
-        chns.push(...channels);
-        updateChannels(chns);
-    });
-});
+    findChannelById(channelId) {
+        return this.channels.find((c) => c.id === channelId);
+    }
+
+    markAsUpToDate(channelId) {
+        const channel = this.findChannelById(channelId);
+        if (channel !== undefined) {
+            channel.upToDate = true;
+            updateChannels(this.channels);
+        }
+    }
+
+    markAsNotUpToDate(channelId) {
+        const channel = this.findChannelById(channelId);
+        if (channel !== undefined) {
+            channel.upToDate = false;
+            updateChannels(this.channels);
+        }
+    }
+}
+
+const appStateRegistry = new AppStateRegistry();
+
+/* -------------------------------------------------------------------------- */
+/*                              DOM manipulations                             */
+/* -------------------------------------------------------------------------- */
 
 function addMessage(message, parent) {
     var template = document.querySelector("#messageRowTemplate");
@@ -165,12 +170,6 @@ function updateMessages(arrayOfMessages) {
     });
 }
 
-const changeChannel = (channelId) => {
-    if (channelId === openChannel) return;
-    openChannel = channelId;
-    fetchAndRenderMessages();
-};
-
 function updateChannels(arrayOfChannels) {
     var parent = document.getElementById("channels");
     parent.innerHTML = "";
@@ -183,7 +182,7 @@ function updateChannels(arrayOfChannels) {
         clone
             .querySelector("#channelRowTemplate_button")
             .addEventListener("click", function () {
-                changeChannel(channel.id);
+                appStateRegistry.changeChannel(channel.id);
             });
         parent.appendChild(clone);
     });
@@ -194,6 +193,63 @@ function updateChannels(arrayOfChannels) {
             channel.upToDate ? "invisible" : "visible";
     });
 }
+
+/* -------------------------------------------------------------------------- */
+/*                                  DOM utils                                 */
+/* -------------------------------------------------------------------------- */
+
+const scrollToBottom = (opts = {}) => {
+    const msgListEl = document.getElementById("messages");
+    if (msgListEl.children.length > 0)
+        msgListEl.lastElementChild.scrollIntoView(opts);
+};
+
+const randomColors = Array.from({ length: 30 }, (_a, index) => {
+    return `hsl(${index * 27}, 40%, 50%)`;
+});
+
+/* -------------------------------------------------------------------------- */
+/*                         Attach DOM event listeners                         */
+/* -------------------------------------------------------------------------- */
+
+// Attach the post message handler
+document
+    .getElementById("newMessageForm")
+    .addEventListener("submit", function (e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        form.reset();
+
+        messageServerService.sendMessage({
+            content: formData.get("message"),
+            date: new Date(),
+            username: getUserName(),
+            photo: getUserPhoto(),
+            channel: appStateRegistry.openChannel,
+        });
+    });
+
+// Attach the create channel handler
+document
+    .getElementById("newChannelForm")
+    .addEventListener("submit", function (e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        form.reset();
+
+        appStateRegistry.createAndRefetchChannels(formData.get("channelName"));
+    });
+
+document.addEventListener("DOMContentLoaded", function () {
+    appStateRegistry.fetchAndRenderMessages();
+    appStateRegistry.fetchAndRenderChannels();
+});
+
+/* -------------------------------------------------------------------------- */
+/*                   Local storage user (to be deprecated?)                   */
+/* -------------------------------------------------------------------------- */
 
 // everything related to the username input
 const getUserNameInput = () => document.querySelector("#usernameInput");
@@ -229,6 +285,10 @@ document.addEventListener("DOMContentLoaded", () => {
     getProfilePhoto().src = getUserPhoto();
 });
 
+/* -------------------------------------------------------------------------- */
+/*                                 Auth utils                                 */
+/* -------------------------------------------------------------------------- */
+
 function parseJwt(token) {
     var base64Url = token.split(".")[1];
     var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -252,6 +312,10 @@ function decodeJwtResponse(data) {
     localStorage.setItem("photo", parsedData.picture);
 }
 
+/* -------------------------------------------------------------------------- */
+/*                        Realtime refresh of messages                        */
+/* -------------------------------------------------------------------------- */
+
 const realtime = new Ably.Realtime({
     authUrl: `${SERVER_URL}rt/subscribe`,
     authMethod: "POST",
@@ -261,20 +325,20 @@ realtime.connection.once("connected", () => {
     const channel = realtime.channels.get("messages");
     channel.subscribe("new_message", (msg) => {
         const { channelId, messageId } = msg.data;
-        if (channelId === openChannel) {
+        if (channelId === appStateRegistry.openChannel) {
             messageServerService.getMessage(messageId).then((message) => {
                 var parent = document.getElementById("messages");
-                msgs.push(message);
+                appStateRegistry.addMessage(message);
                 addMessage(message, parent);
-                setMessageColor(parent, message, msgs.length - 1);
+                setMessageColor(
+                    parent,
+                    message,
+                    appStateRegistry.messages.length - 1
+                );
                 scrollToBottom({ behavior: "smooth" });
             });
         } else {
-            const channelIndex = chns.findIndex((c) => c.id === channelId);
-            if (channelIndex !== -1) {
-                chns[channelIndex].upToDate = false;
-                updateChannels(chns);
-            }
+            appStateRegistry.markAsNotUpToDate(channelId);
         }
     });
 });
