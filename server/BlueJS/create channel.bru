@@ -1,0 +1,17 @@
+meta {
+  name: create channel
+  type: http
+  seq: 6
+}
+
+post {
+  url: http://localhost:8888/chn
+  body: json
+  auth: none
+}
+
+body:json {
+  {
+    "name": "channel test"
+  }
+}

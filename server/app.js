@@ -2,10 +2,16 @@ const {
     postMessage,
     getMessage,
     getAllMessages,
+    getChannelMessages,
     getMessagesNumber,
     delMessage,
     validateMessage,
 } = require("./message.js");
+const {
+    postChannel,
+    getAllChannels,
+    validateChannel,
+} = require("./channel.js");
 require("dotenv").config();
 
 const express = require("express");
@@ -21,12 +27,18 @@ if (!url || !authToken)
 
 function initDb() {
     const db = new Database(url, { authToken });
+    db.exec(`CREATE TABLE IF NOT EXISTS channels (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL
+    );`);
     db.exec(`CREATE TABLE IF NOT EXISTS messages (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   content TEXT NOT NULL,
   username TEXT NOT NULL,
   date TEXT NOT NULL,
-  photo TEXT
+  photo TEXT,
+    channel INTEGER NOT NULL,
+    FOREIGN KEY (channel) REFERENCES channels(id)
   );`);
 }
 // Pour s'assurer que l'on peut faire des appels AJAX au serveur
@@ -34,7 +46,7 @@ app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header(
         "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content-Type, Accept",
+        "Origin, X-Requested-With, Content-Type, Accept"
     );
     const db = new Database(url, { authToken });
     req.db = db;
@@ -64,9 +76,19 @@ app.post("/msg", (req, res) => {
     }
 });
 
-// Must be placed before /msg/:id
+// Must be placed before /msg/:id because it would match /msg/nber
 app.get("/msg/nber", (req, res) => {
     res.status(200).json(getMessagesNumber(req.db));
+});
+
+app.get("/msg/chn/:id", (req, res) => {
+    if (!req.params.id) {
+        res.status(400).send("id is required");
+        return;
+    }
+    const id = parseInt(req.params.id);
+    const messages = getChannelMessages(req.db, id);
+    res.status(200).json(messages);
 });
 
 app.get("/msg/:id", (req, res) => {
@@ -99,6 +121,27 @@ app.delete("/msg/:id", (req, res) => {
         res.status(200).json(message);
     } catch (error) {
         res.status(404).send(error.message);
+    }
+});
+
+app.get("/chn", (req, res) => {
+    const allChannels = getAllChannels(req.db);
+    return res.status(200).json(allChannels);
+});
+
+app.post("/chn", (req, res) => {
+    let channelData;
+    try {
+        channelData = validateChannel(req.body);
+    } catch (error) {
+        res.status(400).send(error.message);
+        return;
+    }
+    try {
+        const newChannel = postChannel(req.db, channelData);
+        res.status(201).json(newChannel);
+    } catch (error) {
+        res.status(500).send(error.message);
     }
 });
 

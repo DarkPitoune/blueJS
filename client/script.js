@@ -1,4 +1,5 @@
 const msgs = [];
+const chns = [];
 
 const SERVER_URL = "https://blue-js-api.vercel.app/msg";
 
@@ -8,14 +9,12 @@ const randomColors = Array.from({ length: 30 }, (_a, index) => {
 
 const getUserName = () => localStorage.getItem("username") || "Anonymous";
 
-const randomPhoto = `https://i.pravatar.cc/150?img=${Math.floor(
-    Math.random() * 70,
-)}`;
-const getUserPhoto = () => localStorage.getItem("photo") || randomPhoto;
+const defaultPhoto = `https://static.vecteezy.com/system/resources/previews/016/770/602/original/click-here-button-on-transparent-background-free-png.png`;
+const getUserPhoto = () => localStorage.getItem("photo") || defaultPhoto;
 
 class MessageServerService {
     sendMessage(message) {
-        fetch(SERVER_URL, {
+        fetch(SERVER_URL + "msg/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -25,11 +24,19 @@ class MessageServerService {
     }
 
     getMessages() {
-        return fetch(SERVER_URL).then((res) => res.json());
+        return fetch(SERVER_URL + "msg/").then((res) => res.json());
     }
 }
 
 const messageServerService = new MessageServerService();
+
+class DiscussionServerService {
+    getDiscussions() {
+        return fetch(SERVER_URL + "chn/").then((res) => res.json());
+    }
+}
+
+const discussionServerService = new DiscussionServerService();
 
 const scrollToBottom = (opts = {}) => {
     document.getElementById("messages").lastElementChild.scrollIntoView(opts);
@@ -49,28 +56,33 @@ document
             date: new Date(),
             username: getUserName(),
             photo: getUserPhoto(),
+            channel: 1,
         };
 
         msgs.push(message);
         messageServerService.sendMessage(message);
 
-        update(msgs);
+        updateMessages(msgs);
         scrollToBottom({ behavior: "smooth" });
     });
 
 // Attach the initial load of messages
 document.addEventListener("DOMContentLoaded", function () {
-    const messageServerService = new MessageServerService();
     messageServerService
         .getMessages()
         .then((messages) => {
             msgs.push(...messages);
-            update(msgs);
+            updateMessages(msgs);
         })
         .then(scrollToBottom);
+
+    channelServerService.getChannels().then((channels) => {
+        chns.push(...channels);
+        updateChannels(chns);
+    });
 });
 
-function update(arrayOfMessages) {
+function updateMessages(arrayOfMessages) {
     var parent = document.getElementById("messages");
     parent.innerHTML = "";
 
@@ -80,7 +92,7 @@ function update(arrayOfMessages) {
         clone.querySelector(".messageRowTemplate_content").textContent =
             message.content;
         clone.querySelector(".messageRowTemplate_date").textContent = new Date(
-            message.date,
+            message.date
         ).toLocaleTimeString();
         clone.querySelector(".messageRowTemplate_username").textContent =
             message.username;
@@ -104,6 +116,19 @@ function update(arrayOfMessages) {
     });
 }
 
+function updateChannels(arrayOfChannels) {
+    var parent = document.getElementById("channels");
+    parent.innerHTML = "";
+
+    arrayOfChannels.forEach(function (channel, index) {
+        var template = document.querySelector("#channelRowTemplate");
+        var clone = document.importNode(template.content, true);
+        clone.querySelector(".channelRowTemplate_name").textContent =
+            channel.name;
+        parent.appendChild(clone);
+    });
+}
+
 // everything related to the username input
 const getUserNameInput = () => document.querySelector("#usernameInput");
 
@@ -114,7 +139,7 @@ function syncUsername(textValue) {
 }
 
 getUserNameInput().addEventListener("input", (e) =>
-    syncUsername(e.target.value),
+    syncUsername(e.target.value)
 );
 
 getUserNameInput().addEventListener("blur", function (e) {

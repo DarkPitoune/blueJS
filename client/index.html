@@ -55,34 +55,37 @@
                 class="text-black ml-2" x-ref="usernameInput" placeholder="your profile pic" />
         </div>
     </header>
-    <div class=" flex h-full min-h-0 grow flex-col items-center">
-        <div id="messages" class="min-h-0 w-[800px] max-w-full grow overflow-y-auto flex flex-col gap-4 py-4 px-2">
+    <div class="flex flex-row items-stretch h-full">
+        <div class="w-64">discussions</div>
+        <div class="flex min-h-0 grow flex-col items-center">
+            <div id="messages" class="min-h-0 w-[800px] max-w-full grow overflow-y-auto flex flex-col gap-4 py-4 px-2">
+            </div>
+            <template id="messageRowTemplate">
+                <article class="flex gap-4 dark:text-white">
+                    <img class="messageRowTemplate_photo h-10 w-10 rounded-full" />
+                    <div class="bg-white px-4 py-2 rounded-lg relative min-w-0 dark:bg-black">
+                        <div
+                            class="bubble_tip absolute top-0 border-8 border-transparent border-t-white dark:border-t-black">
+                        </div>
+                        <div class="messageRowTemplate_username text-sm bold text-xs"></div>
+                        <div class="messageRowTemplate_content text-wrap break-words"></div>
+                        <div class="messageRowTemplate_date text-right italic text-gray-500 text-2xs"></div>
+                        <div>
+                </article>
+            </template>
+            <form id="newMessageForm" class="flex w-[800px] max-w-full items-center gap-4 px-2" autocomplete="off">
+                <input
+                    class="shadow-sky h-10 grow resize-none rounded-full px-3 leading-10 focus:outline-none dark:bg-black dark:text-white"
+                    id="message" name="message" placeholder="Your message" required />
+                <button type="submit"
+                    class="bg-sky focus:shadow-outline rounded-full px-4 py-2 font-bold text-white transition hover:bg-blue-700 focus:bg-blue-700 focus:outline-none">
+                    Send
+                </button>
+            </form>
+            <footer class="text-gray-500 text-xs pt-2">
+                Change your device's theme to see the magic happen!
+            </footer>
         </div>
-        <template id="messageRowTemplate">
-            <article class="flex gap-4 dark:text-white">
-                <img class="messageRowTemplate_photo h-10 w-10 rounded-full" />
-                <div class="bg-white px-4 py-2 rounded-lg relative min-w-0 dark:bg-black">
-                    <div
-                        class="bubble_tip absolute top-0 border-8 border-transparent border-t-white dark:border-t-black">
-                    </div>
-                    <div class="messageRowTemplate_username text-sm bold text-xs"></div>
-                    <div class="messageRowTemplate_content text-wrap break-words"></div>
-                    <div class="messageRowTemplate_date text-right italic text-gray-500 text-2xs"></div>
-                    <div>
-            </article>
-        </template>
-        <form id="newMessageForm" class="flex w-[800px] max-w-full items-center gap-4 px-2" autocomplete="off">
-            <input
-                class="shadow-sky h-10 grow resize-none rounded-full px-3 leading-10 focus:outline-none dark:bg-black dark:text-white"
-                id="message" name="message" placeholder="Your message" required />
-            <button type="submit"
-                class="bg-sky focus:shadow-outline rounded-full px-4 py-2 font-bold text-white transition hover:bg-blue-700 focus:bg-blue-700 focus:outline-none">
-                Send
-            </button>
-        </form>
-        <footer class="text-gray-500 text-xs pt-2">
-            Change your device's theme to see the magic happen!
-        </footer>
     </div>
 </body>
 
