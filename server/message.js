@@ -1,4 +1,4 @@
-const { broadcastNewMessage } = require("./websockets");
+const { broadcastNewMessage } = require("./realtime");
 
 const validateMessage = (message) => {
     const content = message?.content;

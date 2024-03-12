@@ -3,7 +3,6 @@ const chns = [];
 var openChannel = 1;
 
 const SERVER_URL = "https://blue-js-api.vercel.app/";
-const WS_SERVER_URL = "wss://blue-js-api.vercel.app/";
 
 const randomColors = Array.from({ length: 30 }, (_a, index) => {
     return `hsl(${index * 27}, 40%, 50%)`;
@@ -189,24 +188,6 @@ document.addEventListener("DOMContentLoaded", () => {
     getProfilePhoto().src = getUserPhoto();
 });
 
-// Websockets
-const ws = new WebSocket(WS_SERVER_URL);
-ws.onopen = () => {
-    console.log("Connected to the websocket server");
-};
-ws.onmessage = (event) => {
-    const { channelId, messageId } = JSON.parse(event.data);
-    if (channelId === openChannel) {
-        messageServerService.getMessage(messageId).then((message) => {
-            var parent = document.getElementById("messages");
-            msgs.push(message);
-            addMessage(message, parent);
-            setMessageColor(parent, message, msgs.length - 1);
-            scrollToBottom({ behavior: "smooth" });
-        });
-    }
-};
-
 function parseJwt(token) {
     var base64Url = token.split(".")[1];
     var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
@@ -226,3 +207,24 @@ function parseJwt(token) {
 function decodeJwtResponse(data) {
     console.log(parseJwt(data));
 }
+
+const realtime = new Ably.Realtime({
+    authUrl: `${SERVER_URL}rt/subscribe`,
+    authMethod: "POST",
+});
+
+realtime.connection.once("connected", () => {
+    const channel = realtime.channels.get("messages");
+    channel.subscribe("new_message", (msg) => {
+        const { channelId, messageId } = msg.data;
+        if (channelId === openChannel) {
+            messageServerService.getMessage(messageId).then((message) => {
+                var parent = document.getElementById("messages");
+                msgs.push(message);
+                addMessage(message, parent);
+                setMessageColor(parent, message, msgs.length - 1);
+                scrollToBottom({ behavior: "smooth" });
+            });
+        }
+    });
+});

@@ -13,11 +13,12 @@ const {
     validateChannel,
 } = require("./channel.js");
 require("dotenv").config();
+const Ably = require("ably");
 
 const express = require("express");
 let app = express(); //instanciation d'une application Express
 const Database = require("libsql");
-const { wsServer } = require("./websockets.js");
+const { initRealtimeServer } = require("./realtime.js");
 
 app.use(express.json());
 
@@ -146,11 +147,19 @@ app.post("/chn", (req, res) => {
     }
 });
 
-initDb();
-const server = app.listen(8888); //commence à accepter les requêtes
-server.on("upgrade", (request, socket, head) => {
-    wsServer.handleUpgrade(request, socket, head, (socket) => {
-        wsServer.emit("connection", socket, request);
-    });
+app.post("/rt/subscribe", async (req, res) => {
+    try {
+        const ably = new Ably.Rest({ key: process.env.ABLY_TOKEN });
+        ably.auth.createTokenRequest({}, null, (err, tokenRequest) => {
+            res.status(200).json(tokenRequest);
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).send(error.message);
+    }
 });
+
+initDb();
+initRealtimeServer();
+app.listen(8888); //commence à accepter les requêtes
 console.log("App listening on port 8888...");
