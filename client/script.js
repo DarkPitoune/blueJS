@@ -205,7 +205,10 @@ function parseJwt(token) {
 }
 
 function decodeJwtResponse(data) {
-    console.log(parseJwt(data));
+    const parsedData = parseJwt(data);
+    console.log(parsedData);
+    localStorage.setItem("username", parsedData.given_name);
+    localStorage.setItem("photo", parsedData.picture);
 }
 
 const realtime = new Ably.Realtime({
