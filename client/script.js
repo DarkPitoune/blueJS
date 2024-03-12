@@ -1,7 +1,7 @@
 const msgs = [];
 const chns = [];
 
-const SERVER_URL = "https://blue-js-api.vercel.app/msg";
+const SERVER_URL = "https://blue-js-api.vercel.app/";
 
 const randomColors = Array.from({ length: 30 }, (_a, index) => {
     return `hsl(${index * 27}, 40%, 50%)`;
