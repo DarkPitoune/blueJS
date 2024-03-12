@@ -1,5 +1,5 @@
 var msgs = [];
-const chns = [];
+var chns = [];
 var openChannel = 1;
 
 const SERVER_URL = "https://blue-js-api.vercel.app/";
@@ -41,6 +41,14 @@ class ChannelServerService {
     getChannels() {
         return fetch(SERVER_URL + "chn/").then((res) => res.json());
     }
+
+    createChannel(name) {
+        return fetch(SERVER_URL + "chn/", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name }),
+        });
+    }
 }
 
 const channelServerService = new ChannelServerService();
@@ -67,6 +75,26 @@ document
             photo: getUserPhoto(),
             channel: openChannel,
         });
+    });
+
+// Attach the create channel handler
+document
+    .getElementById("newChannelForm")
+    .addEventListener("submit", function (e) {
+        e.preventDefault();
+        const form = e.target;
+        const formData = new FormData(form);
+        form.reset();
+
+        channelServerService
+            .createChannel(formData.get("channelName"))
+            .then(() => {
+                channelServerService.getChannels().then((channels) => {
+                    chns = [];
+                    chns.push(...channels);
+                    updateChannels(chns);
+                });
+            });
     });
 
 // Attach the initial load of messages and channels

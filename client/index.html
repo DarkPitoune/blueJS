@@ -66,8 +66,25 @@
         </div>
     </header>
     <div class="flex flex-row items-stretch min-h-0 grow">
-        <div id="channels"
-            class="w-64 bg-white border-r border-gray-200 dark:border-gray-900 flex flex-col dark:bg-darkSky shadow-md shadow-darkSky dark:shadow-sea">
+        <div class="w-64 bg-white border-r border-gray-200 dark:border-gray-900 flex flex-col dark:bg-darkSky shadow-md shadow-darkSky dark:shadow-sea">
+            <div id="channels" class="flex flex-col">
+            </div>
+
+            <div class="grow"></div>
+
+            <form class="flex items-center gap-4 px-6 py-4" id="newChannelForm">
+                <input id="newChannelInput"
+                    class="border-b border-gray-200 dark:border-gray-900 py-4 px-6 text-left hover:bg-gray-100 dark:text-white hover:dark:bg-gray-800 transition rounded w-full focus:outline-none dark:bg-darkSky dark:text-white"
+                    placeholder="New channel"
+                    name="channelName" />
+                
+                <button id="newChannelButton"
+                    type="submit"
+                    class="bg-sky focus:shadow-outline rounded-full px-4 py-2 font-bold text-white transition hover:bg-blue-700 focus:bg-blue-700 focus:outline-none">
+                    +
+                </button>
+            </form>
+
         </div>
         <template id="channelRowTemplate">
             <button id="channelRowTemplate_button"
