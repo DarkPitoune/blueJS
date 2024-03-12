@@ -191,6 +191,10 @@ function updateChannels(arrayOfChannels) {
         var child = parent.children[index];
         child.querySelector("#channelRowTemplate_name_badge").className =
             channel.upToDate ? "invisible" : "visible";
+        if (channel.id === appStateRegistry.openChannel) {
+            child.querySelector("#channelRowTemplate_name_text").className =
+                "font-bold pl-1";
+        }
     });
 }
 
