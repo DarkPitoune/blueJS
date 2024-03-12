@@ -55,8 +55,15 @@
                 class="text-black ml-2" x-ref="usernameInput" placeholder="your profile pic" />
         </div>
     </header>
-    <div class="flex flex-row items-stretch h-full">
-        <div class="w-64">discussions</div>
+    <div class="flex flex-row items-stretch min-h-0 grow">
+        <div id="channels" class="w-64 bg-white border-r border-gray-200 flex flex-col">
+        </div>
+        <template id="channelRowTemplate">
+            <button id="channelRowTemplate_button"
+                class="border-b border-gray-200 py-4 px-2 text-left hover:bg-gray-100">
+                <div id="channelRowTemplate_name" class=""></div>
+            </button>
+        </template>
         <div class="flex min-h-0 grow flex-col items-center">
             <div id="messages" class="min-h-0 w-[800px] max-w-full grow overflow-y-auto flex flex-col gap-4 py-4 px-2">
             </div>

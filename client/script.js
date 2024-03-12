@@ -1,5 +1,6 @@
-const msgs = [];
+var msgs = [];
 const chns = [];
+var openChannel = 1;
 
 const SERVER_URL = "https://blue-js-api.vercel.app/";
 
@@ -24,22 +25,26 @@ class MessageServerService {
     }
 
     getMessages() {
-        return fetch(SERVER_URL + "msg/").then((res) => res.json());
+        return fetch(SERVER_URL + "msg/chn/" + openChannel).then((res) =>
+            res.json()
+        );
     }
 }
 
 const messageServerService = new MessageServerService();
 
-class DiscussionServerService {
-    getDiscussions() {
+class ChannelServerService {
+    getChannels() {
         return fetch(SERVER_URL + "chn/").then((res) => res.json());
     }
 }
 
-const discussionServerService = new DiscussionServerService();
+const channelServerService = new ChannelServerService();
 
 const scrollToBottom = (opts = {}) => {
-    document.getElementById("messages").lastElementChild.scrollIntoView(opts);
+    const msgListEl = document.getElementById("messages");
+    if (msgListEl.children.length > 0)
+        msgListEl.lastElementChild.scrollIntoView(opts);
 };
 
 // Attach the post message handler
@@ -56,7 +61,7 @@ document
             date: new Date(),
             username: getUserName(),
             photo: getUserPhoto(),
-            channel: 1,
+            channel: openChannel,
         };
 
         msgs.push(message);
@@ -66,15 +71,19 @@ document
         scrollToBottom({ behavior: "smooth" });
     });
 
-// Attach the initial load of messages
-document.addEventListener("DOMContentLoaded", function () {
+// Attach the initial load of messages and channels
+const fetchAndRenderMessages = () => {
     messageServerService
         .getMessages()
         .then((messages) => {
-            msgs.push(...messages);
+            msgs = messages;
             updateMessages(msgs);
         })
         .then(scrollToBottom);
+};
+
+document.addEventListener("DOMContentLoaded", function () {
+    fetchAndRenderMessages();
 
     channelServerService.getChannels().then((channels) => {
         chns.push(...channels);
@@ -116,6 +125,12 @@ function updateMessages(arrayOfMessages) {
     });
 }
 
+const changeChannel = (channelId) => {
+    if (channelId === openChannel) return;
+    openChannel = channelId;
+    fetchAndRenderMessages();
+};
+
 function updateChannels(arrayOfChannels) {
     var parent = document.getElementById("channels");
     parent.innerHTML = "";
@@ -123,8 +138,13 @@ function updateChannels(arrayOfChannels) {
     arrayOfChannels.forEach(function (channel, index) {
         var template = document.querySelector("#channelRowTemplate");
         var clone = document.importNode(template.content, true);
-        clone.querySelector(".channelRowTemplate_name").textContent =
+        clone.querySelector("#channelRowTemplate_name").textContent =
             channel.name;
+        clone
+            .querySelector("#channelRowTemplate_button")
+            .addEventListener("click", function () {
+                changeChannel(channel.id);
+            });
         parent.appendChild(clone);
     });
 }
