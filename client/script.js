@@ -3,7 +3,7 @@ const chns = [];
 var openChannel = 1;
 
 const SERVER_URL = "https://blue-js-api.vercel.app/";
-const WS_SERVER_URL = "ws://blue-js-api.vercel.app/";
+const WS_SERVER_URL = "wss://blue-js-api.vercel.app/";
 
 const randomColors = Array.from({ length: 30 }, (_a, index) => {
     return `hsl(${index * 27}, 40%, 50%)`;
@@ -190,7 +190,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 // Websockets
-const ws = new WebSocket("ws://localhost:8888");
+const ws = new WebSocket(WS_SERVER_URL);
 ws.onopen = () => {
     console.log("Connected to the websocket server");
 };
