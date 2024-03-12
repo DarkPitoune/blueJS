@@ -61,7 +61,7 @@ app.get("/", function (req, res) {
     res.send("Hello");
 });
 
-app.post("/msg", (req, res) => {
+app.post("/msg", async (req, res) => {
     let messageData;
     try {
         messageData = validateMessage(req.body);
@@ -71,7 +71,7 @@ app.post("/msg", (req, res) => {
     }
 
     try {
-        const newMessage = postMessage(req.db, messageData);
+        const newMessage = await postMessage(req.db, messageData);
         res.status(201).json(newMessage);
     } catch (error) {
         res.status(500).send(error.message);

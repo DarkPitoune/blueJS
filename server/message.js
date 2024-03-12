@@ -18,7 +18,7 @@ const validateMessage = (message) => {
     return { content, username, date, photo, channel };
 };
 
-const postMessage = (db, messageData) => {
+const postMessage = async (db, messageData) => {
     const { id } = db
         .prepare(
             "INSERT INTO messages (content, username, date, channel, photo) VALUES (?, ?, ?, ?, ?) RETURNING id"
@@ -31,7 +31,7 @@ const postMessage = (db, messageData) => {
             messageData.photo
         );
 
-    broadcastNewMessage(messageData.channel, id);
+    await broadcastNewMessage(messageData.channel, id);
 
     return { id, ...messageData };
 };
