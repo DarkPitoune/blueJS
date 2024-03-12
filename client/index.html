@@ -53,6 +53,15 @@
                 class="h-10 w-10 ml-2 rounded-full" />
             <input id="photoInput" x-show="open" type="text" x-on:keydown.enter="open = false" x-on:blur="open = false"
                 class="text-black ml-2" x-ref="usernameInput" placeholder="your profile pic" />
+            <div id="g_id_onload"
+                data-client_id="1053905395251-u1bk8clkn58ehucvjritv6imo9fgpcs1.apps.googleusercontent.com"
+                data-context="signin" data-ux_mode="popup" data-callback="handleCredentialResponse"
+                data-auto_select="true" data-itp_support="true">
+            </div>
+
+            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue" data-text="signin"
+                data-size="large" data-logo_alignment="left">
+            </div>
         </div>
     </header>
     <div class="flex flex-row items-stretch min-h-0 grow">
@@ -98,5 +107,12 @@
 </body>
 
 <script src="script.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+<script>
+    function handleCredentialResponse(response) {
+        decodeJwtResponse(response.credential);
+    }
+</script>
+
 
 </html>
