@@ -1,3 +1,5 @@
+const { broadcastNewMessage } = require("./websockets");
+
 const validateMessage = (message) => {
     const content = message?.content;
     if (!content) throw new Error("content is required");
@@ -17,19 +19,21 @@ const validateMessage = (message) => {
 };
 
 const postMessage = (db, messageData) => {
-    db.prepare(
-        "INSERT INTO messages (content, username, date, channel, photo) VALUES (?, ?, ?, ?, ?)"
-    ).get(
-        messageData.content,
-        messageData.username,
-        messageData.date,
-        messageData.channel,
-        messageData.photo
-    );
-    return {
-        id: db.prepare("SELECT last_insert_rowid() as id").get().id,
-        ...messageData,
-    };
+    const { id } = db
+        .prepare(
+            "INSERT INTO messages (content, username, date, channel, photo) VALUES (?, ?, ?, ?, ?) RETURNING id"
+        )
+        .get(
+            messageData.content,
+            messageData.username,
+            messageData.date,
+            messageData.channel,
+            messageData.photo
+        );
+
+    broadcastNewMessage(messageData.channel, id);
+
+    return { id, ...messageData };
 };
 
 const getMessage = (db, id) => {

@@ -3,6 +3,7 @@ const chns = [];
 var openChannel = 1;
 
 const SERVER_URL = "https://blue-js-api.vercel.app/";
+const WS_SERVER_URL = "ws://blue-js-api.vercel.app/";
 
 const randomColors = Array.from({ length: 30 }, (_a, index) => {
     return `hsl(${index * 27}, 40%, 50%)`;
@@ -28,6 +29,10 @@ class MessageServerService {
         return fetch(SERVER_URL + "msg/chn/" + openChannel).then((res) =>
             res.json()
         );
+    }
+
+    getMessage(id) {
+        return fetch(SERVER_URL + "msg/" + id).then((res) => res.json());
     }
 }
 
@@ -56,19 +61,13 @@ document
         const formData = new FormData(form);
         form.reset();
 
-        const message = {
+        messageServerService.sendMessage({
             content: formData.get("message"),
             date: new Date(),
             username: getUserName(),
             photo: getUserPhoto(),
             channel: openChannel,
-        };
-
-        msgs.push(message);
-        messageServerService.sendMessage(message);
-
-        updateMessages(msgs);
-        scrollToBottom({ behavior: "smooth" });
+        });
     });
 
 // Attach the initial load of messages and channels
@@ -91,37 +90,44 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 });
 
+function addMessage(message, parent) {
+    var template = document.querySelector("#messageRowTemplate");
+    var clone = document.importNode(template.content, true);
+    clone.querySelector(".messageRowTemplate_content").textContent =
+        message.content;
+    clone.querySelector(".messageRowTemplate_date").textContent = new Date(
+        message.date
+    ).toLocaleTimeString();
+    clone.querySelector(".messageRowTemplate_username").textContent =
+        message.username;
+    clone.querySelector(".messageRowTemplate_photo").src = message.photo;
+
+    didISendTheMessage =
+        message.username === getUserName() && message.username !== "Anonymous";
+
+    clone
+        .querySelector("article")
+        .classList.add(didISendTheMessage ? "sent" : "received");
+
+    parent.appendChild(clone);
+}
+
+function setMessageColor(parent, message, index) {
+    var messageDiv = parent.children[index];
+    messageDiv.querySelector(".messageRowTemplate_username").style.color =
+        randomColors[message.username.length % randomColors.length];
+}
+
 function updateMessages(arrayOfMessages) {
     var parent = document.getElementById("messages");
     parent.innerHTML = "";
 
     arrayOfMessages.forEach(function (message, index) {
-        var template = document.querySelector("#messageRowTemplate");
-        var clone = document.importNode(template.content, true);
-        clone.querySelector(".messageRowTemplate_content").textContent =
-            message.content;
-        clone.querySelector(".messageRowTemplate_date").textContent = new Date(
-            message.date
-        ).toLocaleTimeString();
-        clone.querySelector(".messageRowTemplate_username").textContent =
-            message.username;
-        clone.querySelector(".messageRowTemplate_photo").src = message.photo;
-
-        didISendTheMessage =
-            message.username === getUserName() &&
-            message.username !== "Anonymous";
-
-        clone
-            .querySelector("article")
-            .classList.add(didISendTheMessage ? "sent" : "received");
-
-        parent.appendChild(clone);
+        addMessage(message, parent);
     });
 
     arrayOfMessages.forEach(function (message, index) {
-        var messageDiv = parent.children[index];
-        messageDiv.querySelector(".messageRowTemplate_username").style.color =
-            randomColors[message.username.length % randomColors.length];
+        setMessageColor(parent, message, index);
     });
 }
 
@@ -182,3 +188,21 @@ getUserPhotoInput().addEventListener("blur", (e) => {
 document.addEventListener("DOMContentLoaded", () => {
     getProfilePhoto().src = getUserPhoto();
 });
+
+// Websockets
+const ws = new WebSocket("ws://localhost:8888");
+ws.onopen = () => {
+    console.log("Connected to the websocket server");
+};
+ws.onmessage = (event) => {
+    const { channelId, messageId } = JSON.parse(event.data);
+    if (channelId === openChannel) {
+        messageServerService.getMessage(messageId).then((message) => {
+            var parent = document.getElementById("messages");
+            msgs.push(message);
+            addMessage(message, parent);
+            setMessageColor(parent, message, msgs.length - 1);
+            scrollToBottom({ behavior: "smooth" });
+        });
+    }
+};

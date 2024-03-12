@@ -17,6 +17,7 @@ require("dotenv").config();
 const express = require("express");
 let app = express(); //instanciation d'une application Express
 const Database = require("libsql");
+const { wsServer } = require("./websockets.js");
 
 app.use(express.json());
 
@@ -146,5 +147,10 @@ app.post("/chn", (req, res) => {
 });
 
 initDb();
-app.listen(8888); //commence à accepter les requêtes
+const server = app.listen(8888); //commence à accepter les requêtes
+server.on("upgrade", (request, socket, head) => {
+    wsServer.handleUpgrade(request, socket, head, (socket) => {
+        wsServer.emit("connection", socket, request);
+    });
+});
 console.log("App listening on port 8888...");
