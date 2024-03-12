@@ -39,7 +39,14 @@ const messageServerService = new MessageServerService();
 
 class ChannelServerService {
     getChannels() {
-        return fetch(SERVER_URL + "chn/").then((res) => res.json());
+        return fetch(SERVER_URL + "chn/")
+            .then((res) => res.json())
+            .then((channels) =>
+                channels.map((channel) => ({
+                    ...channel,
+                    upToDate: true,
+                }))
+            );
     }
 
     createChannel(name) {
@@ -171,7 +178,7 @@ function updateChannels(arrayOfChannels) {
     arrayOfChannels.forEach(function (channel, index) {
         var template = document.querySelector("#channelRowTemplate");
         var clone = document.importNode(template.content, true);
-        clone.querySelector("#channelRowTemplate_name").textContent =
+        clone.querySelector("#channelRowTemplate_name_text").textContent =
             channel.name;
         clone
             .querySelector("#channelRowTemplate_button")
@@ -179,6 +186,12 @@ function updateChannels(arrayOfChannels) {
                 changeChannel(channel.id);
             });
         parent.appendChild(clone);
+    });
+
+    arrayOfChannels.forEach(function (channel, index) {
+        var child = parent.children[index];
+        child.querySelector("#channelRowTemplate_name_badge").className =
+            channel.upToDate ? "invisible" : "visible";
     });
 }
 
@@ -256,6 +269,12 @@ realtime.connection.once("connected", () => {
                 setMessageColor(parent, message, msgs.length - 1);
                 scrollToBottom({ behavior: "smooth" });
             });
+        } else {
+            const channelIndex = chns.findIndex((c) => c.id === channelId);
+            if (channelIndex !== -1) {
+                chns[channelIndex].upToDate = false;
+                updateChannels(chns);
+            }
         }
     });
 });

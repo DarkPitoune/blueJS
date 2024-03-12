@@ -88,8 +88,11 @@
         </div>
         <template id="channelRowTemplate">
             <button id="channelRowTemplate_button"
-                class="border-b border-gray-200 dark:border-gray-900 py-4 px-6 text-left hover:bg-gray-100 dark:text-white hover:dark:bg-gray-800 transition rounded">
-                <div id="channelRowTemplate_name" class=""></div>
+                class="channelRowTemplate_button border-b border-gray-200 dark:border-gray-900 py-4 px-6 pl-8 text-left hover:bg-gray-100 dark:text-white hover:dark:bg-gray-800 transition rounded">
+                <div id="channelRowTemplate_name">
+                    <div id="channelRowTemplate_name_text"></div>
+                    <div id="channelRowTemplate_name_badge"></div>
+                </div>
             </button>
         </template>
         <div class="flex min-h-0 grow flex-col items-center">

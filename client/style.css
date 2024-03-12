@@ -21,3 +21,18 @@
 .received .bubble_tip {
     left: -0.5rem;
 }
+
+.channelRowTemplate_button > div {
+    position: relative;
+}
+
+#channelRowTemplate_name_badge {
+    background-color: #039aff;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    position: absolute;
+    display: block;
+    top: 1px;
+    left: -10px;
+}
