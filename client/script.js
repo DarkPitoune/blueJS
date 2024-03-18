@@ -10,14 +10,18 @@ const getUserPhoto = () => localStorage.getItem("photo") || defaultPhoto;
 /* -------------------------------------------------------------------------- */
 
 class MessageServerService {
-    sendMessage(message) {
-        fetch(SERVER_URL + "msg/", {
+    async sendMessage(message) {
+        const res = await fetch(SERVER_URL + "msg/", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
             body: JSON.stringify(message),
         });
+
+        const data = await res.json();
+        console.log(data);
+        addMessageAndRefresh(data);
     }
 
     getMessages() {
@@ -198,6 +202,14 @@ function updateChannels(arrayOfChannels) {
     });
 }
 
+function addMessageAndRefresh(message) {
+    var parent = document.getElementById("messages");
+    appStateRegistry.addMessage(message);
+    addMessage(message, parent);
+    setMessageColor(parent, message, appStateRegistry.messages.length - 1);
+    scrollToBottom({ behavior: "smooth" });
+}
+
 /* -------------------------------------------------------------------------- */
 /*                                  DOM utils                                 */
 /* -------------------------------------------------------------------------- */
@@ -329,20 +341,13 @@ realtime.connection.once("connected", () => {
     const channel = realtime.channels.get("messages");
     channel.subscribe("new_message", (msg) => {
         const { channelId, messageId } = msg.data;
-        if (channelId === appStateRegistry.openChannel) {
-            messageServerService.getMessage(messageId).then((message) => {
-                var parent = document.getElementById("messages");
-                appStateRegistry.addMessage(message);
-                addMessage(message, parent);
-                setMessageColor(
-                    parent,
-                    message,
-                    appStateRegistry.messages.length - 1
-                );
-                scrollToBottom({ behavior: "smooth" });
-            });
-        } else {
+        if (channelId !== appStateRegistry.openChannel) {
             appStateRegistry.markAsNotUpToDate(channelId);
+            return;
         }
+
+        if (appStateRegistry.messages.find((m) => m.id === messageId)) return;
+
+        messageServerService.getMessage(messageId).then(addMessageAndRefresh);
     });
 });
