@@ -15,6 +15,7 @@ class MessageServerService {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
             },
             body: JSON.stringify(message),
         });
@@ -24,13 +25,19 @@ class MessageServerService {
     }
 
     getMessages() {
-        return fetch(
-            SERVER_URL + "msg/chn/" + appStateRegistry.openChannel
-        ).then((res) => res.json());
+        return fetch(SERVER_URL + "msg/chn/" + appStateRegistry.openChannel, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        }).then((res) => res.json());
     }
 
     getMessage(id) {
-        return fetch(SERVER_URL + "msg/" + id).then((res) => res.json());
+        return fetch(SERVER_URL + "msg/" + id, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        }).then((res) => res.json());
     }
 }
 
