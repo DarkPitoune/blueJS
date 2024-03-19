@@ -36,7 +36,7 @@ class MessageServerService {
 
 class ChannelServerService {
     getChannels() {
-        return fetch(SERVER_URL + "chn/")
+        return fetch(SERVER_URL + "chn/", {headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }})
             .then((res) => res.json())
             .then((channels) =>
                 channels.map((channel) => ({
@@ -49,7 +49,7 @@ class ChannelServerService {
     createChannel(name) {
         return fetch(SERVER_URL + "chn/", {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem("token")}`,
             body: JSON.stringify({ name }),
         });
     }
@@ -322,18 +322,9 @@ function parseJwt(token) {
     return JSON.parse(jsonPayload);
 }
 
-function setCookie(name, value) {
-    var date = new Date();
-    date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
-    var expires = "; expires=" + date.toUTCString();
-    const cookie = name + "=" + (value || "") + expires + "; path=/";
-    console.log(cookie);
-    document.cookie = cookie;
-}
-
 function handleAuthResponse(data) {
-    setCookie("session-token", data);
     const parsedData = parseJwt(data);
+    localStorage.setItem("token", data);
     localStorage.setItem("username", parsedData.given_name);
     localStorage.setItem("photo", parsedData.picture);
 }
