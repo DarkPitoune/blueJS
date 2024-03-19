@@ -322,7 +322,15 @@ function parseJwt(token) {
     return JSON.parse(jsonPayload);
 }
 
-function decodeJwtResponse(data) {
+function setCookie(name, value) {
+    var date = new Date();
+    date.setTime(date.getTime() + days * 24 * 60 * 60 * 1000);
+    expires = "; expires=" + date.toUTCString();
+    document.cookie = name + "=" + (value || "") + expires + "; path=/";
+}
+
+function handleAuthResponse(data) {
+    setCookie("session-token", data);
     const parsedData = parseJwt(data);
     console.log(parsedData);
     localStorage.setItem("username", parsedData.given_name);

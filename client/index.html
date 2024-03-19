@@ -130,9 +130,7 @@
 <script src="https://accounts.google.com/gsi/client" async defer></script>
 <script>
     function handleCredentialResponse(response) {
-        console.log(response);
-        document.cookie = `session-token=${response.credential}`;
-        decodeJwtResponse(response.credential);
+        handleAuthResponse(response.credential);
     }
 </script>
 
