@@ -17,7 +17,7 @@ const Ably = require("ably");
 
 const express = require("express");
 let app = express(); //instanciation d'une application Express
-const Database = require("libsql");
+const { createClient } = require("@libsql/client");
 const { initRealtimeServer } = require("./realtime.js");
 
 app.use(express.json());
@@ -27,13 +27,13 @@ const authToken = process.env.TURSO_TOKEN;
 if (!url || !authToken)
     throw Error("TURSO_URL and TURSO_TOKEN must be set in environment");
 
-function initDb() {
-    const db = new Database(url, { authToken });
-    db.exec(`CREATE TABLE IF NOT EXISTS channels (
+async function initDb() {
+    const db = createClient({ url, authToken });
+    await db.execute(`CREATE TABLE IF NOT EXISTS channels (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL
     );`);
-    db.exec(`CREATE TABLE IF NOT EXISTS messages (
+    db.execute(`CREATE TABLE IF NOT EXISTS messages (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   content TEXT NOT NULL,
   username TEXT NOT NULL,
@@ -50,7 +50,7 @@ app.use(function (req, res, next) {
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content-Type, Accept"
     );
-    const db = new Database(url, { authToken });
+    const db = createClient({ url, authToken });
     req.db = db;
     next();
 });
@@ -93,45 +93,45 @@ app.get("/msg/chn/:id", (req, res) => {
     res.status(200).json(messages);
 });
 
-app.get("/msg/:id", (req, res) => {
+app.get("/msg/:id", async (req, res) => {
     if (!req.params.id) {
         res.status(400).send("id is required");
         return;
     }
     try {
         const id = parseInt(req.params.id);
-        const message = getMessage(req.db, id);
+        const message = await getMessage(req.db, id);
         res.status(200).json(message);
     } catch (error) {
         res.status(404).send(error.message);
     }
 });
 
-app.get("/msg", (req, res) => {
-    const allMessages = getAllMessages(req.db);
+app.get("/msg", async (req, res) => {
+    const allMessages = await getAllMessages(req.db);
     return res.status(200).json(allMessages);
 });
 
-app.delete("/msg/:id", (req, res) => {
+app.delete("/msg/:id", async (req, res) => {
     if (!req.params.id) {
         res.status(400).send("id is required");
         return;
     }
     try {
         const id = parseInt(req.params.id);
-        delMessage(req.db, id);
-        res.status(200).json(message);
+        await delMessage(req.db, id);
+        res.status(200).send("Message deleted");
     } catch (error) {
         res.status(404).send(error.message);
     }
 });
 
-app.get("/chn", (req, res) => {
-    const allChannels = getAllChannels(req.db);
+app.get("/chn", async (req, res) => {
+    const allChannels = await getAllChannels(req.db);
     return res.status(200).json(allChannels);
 });
 
-app.post("/chn", (req, res) => {
+app.post("/chn", async (req, res) => {
     let channelData;
     try {
         channelData = validateChannel(req.body);
@@ -140,7 +140,7 @@ app.post("/chn", (req, res) => {
         return;
     }
     try {
-        const newChannel = postChannel(req.db, channelData);
+        const newChannel = await postChannel(req.db, channelData);
         res.status(201).json(newChannel);
     } catch (error) {
         res.status(500).send(error.message);

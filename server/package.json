@@ -11,10 +11,10 @@
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "@libsql/client": "^0.5.6",
         "ably": "^1.2.49",
         "dotenv": "^16.4.5",
         "express": "^4.17.1",
-        "libsql": "^0.3.8",
         "ws": "^8.16.0"
     },
     "engines": {

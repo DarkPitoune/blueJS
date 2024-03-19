@@ -5,12 +5,16 @@ const validateChannel = (channelData) => {
     return { name: channelData.name };
 };
 
-const getAllChannels = (db) => db.prepare("SELECT * FROM channels").all();
+const getAllChannels = (db) =>
+    db.execute("SELECT * FROM channels").then((res) => res.rows);
 
 const postChannel = (db, channelData) => {
-    db.prepare("INSERT INTO channels (name) VALUES (?)").run(channelData.name);
+    const { rows } = db.execute({
+        sql: "INSERT INTO channels (name) VALUES (?) RETURNING id",
+        args: [channelData.name],
+    });
     return {
-        id: db.prepare("SELECT last_insert_rowid() as id").get().id,
+        id: rows[0].id,
         ...channelData,
     };
 };
