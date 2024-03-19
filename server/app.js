@@ -43,6 +43,11 @@ async function initDb() {
     FOREIGN KEY (channel) REFERENCES channels(id)
   );`);
 }
+
+if (process.env.NODE_ENV === "development") {
+    app.use("/", express.static("../client"));
+}
+
 // Pour s'assurer que l'on peut faire des appels AJAX au serveur
 app.use(function (req, res, next) {
     res.header("Access-Control-Allow-Origin", "*");
@@ -56,11 +61,6 @@ app.use(function (req, res, next) {
 });
 
 // Definition of the different routes
-
-app.get("/", function (req, res) {
-    res.send("Hello");
-});
-
 app.post("/msg", async (req, res) => {
     let messageData;
     try {

@@ -20,7 +20,6 @@ class MessageServerService {
         });
 
         const data = await res.json();
-        console.log(data);
         addMessageAndRefresh(data);
     }
 
@@ -204,6 +203,8 @@ function updateChannels(arrayOfChannels) {
 
 function addMessageAndRefresh(message) {
     var parent = document.getElementById("messages");
+
+    if (appStateRegistry.messages.find((m) => m.id === message.id)) return;
     appStateRegistry.addMessage(message);
     addMessage(message, parent);
     setMessageColor(parent, message, appStateRegistry.messages.length - 1);
