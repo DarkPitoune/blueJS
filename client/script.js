@@ -36,7 +36,11 @@ class MessageServerService {
 
 class ChannelServerService {
     getChannels() {
-        return fetch(SERVER_URL + "chn/", {headers: { "Authorization": `Bearer ${localStorage.getItem("token")}` }})
+        return fetch(SERVER_URL + "chn/", {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        })
             .then((res) => res.json())
             .then((channels) =>
                 channels.map((channel) => ({
@@ -49,7 +53,10 @@ class ChannelServerService {
     createChannel(name) {
         return fetch(SERVER_URL + "chn/", {
             method: "POST",
-            headers: { "Content-Type": "application/json", "Authorization": `Bearer ${localStorage.getItem("token")}`,
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
             body: JSON.stringify({ name }),
         });
     }
