@@ -131,7 +131,7 @@
 <script>
     function handleCredentialResponse(response) {
         console.log(response);
-        document.cookies["session-token"] = response.credential;
+        document.cookie = `session-token=${response.credential}`;
         decodeJwtResponse(response.credential);
     }
 </script>
