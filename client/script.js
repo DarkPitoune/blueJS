@@ -326,18 +326,19 @@ function setCookie(name, value) {
     var date = new Date();
     date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
     var expires = "; expires=" + date.toUTCString();
-    document.cookie =
+    const cookie =
         name +
         "=" +
         (value || "") +
         expires +
         "; path=/; domain=blue-js-api.vercel.app";
+    console.log(cookie);
+    document.cookie = cookie;
 }
 
 function handleAuthResponse(data) {
     setCookie("session-token", data);
     const parsedData = parseJwt(data);
-    console.log(parsedData);
     localStorage.setItem("username", parsedData.given_name);
     localStorage.setItem("photo", parsedData.picture);
 }
