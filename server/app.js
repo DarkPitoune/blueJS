@@ -83,13 +83,13 @@ app.get("/msg/nber", (req, res) => {
     res.status(200).json(getMessagesNumber(req.db));
 });
 
-app.get("/msg/chn/:id", (req, res) => {
+app.get("/msg/chn/:id", async (req, res) => {
     if (!req.params.id) {
         res.status(400).send("id is required");
         return;
     }
     const id = parseInt(req.params.id);
-    const messages = getChannelMessages(req.db, id);
+    const messages = await getChannelMessages(req.db, id);
     res.status(200).json(messages);
 });
 
