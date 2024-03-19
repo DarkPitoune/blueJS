@@ -326,12 +326,7 @@ function setCookie(name, value) {
     var date = new Date();
     date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
     var expires = "; expires=" + date.toUTCString();
-    const cookie =
-        name +
-        "=" +
-        (value || "") +
-        expires +
-        "; path=/; domain=blue-js-api.vercel.app";
+    const cookie = name + "=" + (value || "") + expires + "; path=/";
     console.log(cookie);
     document.cookie = cookie;
 }
