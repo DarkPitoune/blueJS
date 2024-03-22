@@ -45,15 +45,13 @@
     <header
         class="bg-sky dark:bg-darkSea box-shadow shadow-sky px-6 py-3 text-3xl text-white flex justify-between items-center">
         <span id="logo"><span class="text-5xl">B</span>lue</span>
-        <div class="relative text-base flex items-center" x-data="{ open: false }">
+        <div class="relative text-base flex items-center">
             Hello <input spellcheck="false" id="usernameInput"
                 class="mx-2 bg-transparent relative focus:outline-none after:block after:absolute after:bottom-0 after:w-0 after:focus:w-full after:h-px after:bg-white font-mono" />
             !
-            <img x-show="!open" alt="profile pic" id="profilePhoto" x-on:click="open = true"
+            <img alt="profile pic" id="profilePhoto"
                 src='https://as2.ftcdn.net/v2/jpg/03/31/69/91/1000_F_331699188_lRpvqxO5QRtwOM05gR50ImaaJgBx68vi.jpg'
                 class="h-10 w-10 ml-2 rounded-full" />
-            <input id="photoInput" x-show="open" type="text" x-on:keydown.enter="open = false" x-on:blur="open = false"
-                class="text-black ml-2" x-ref="usernameInput" placeholder="your profile pic" />
             <div id="g_id_onload"
                 data-client_id="1053905395251-u1bk8clkn58ehucvjritv6imo9fgpcs1.apps.googleusercontent.com"
                 data-context="signin" data-ux_mode="popup" data-callback="handleCredentialResponse"
