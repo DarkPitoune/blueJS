@@ -19,6 +19,7 @@ const express = require("express");
 let app = express(); //instanciation d'une application Express
 const { createClient } = require("@libsql/client");
 const { initRealtimeServer } = require("./realtime.js");
+const { authenticate } = require("./authenticate.js");
 
 app.use(express.json());
 
@@ -59,6 +60,8 @@ app.use(function (req, res, next) {
     req.db = db;
     next();
 });
+
+app.use(authenticate);
 
 // Definition of the different routes
 app.post("/msg", async (req, res) => {
