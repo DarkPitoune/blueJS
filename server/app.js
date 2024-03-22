@@ -61,7 +61,7 @@ app.use(function (req, res, next) {
     next();
 });
 
-app.use(authenticate);
+// app.use(authenticate);
 
 // Definition of the different routes
 app.post("/msg", async (req, res) => {
